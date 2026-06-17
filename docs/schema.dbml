@@ -1,0 +1,191 @@
+Enum kyc_status {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+Enum order_side {
+  BUY
+  SELL
+}
+
+Enum order_type {
+  LIMIT
+  MARKET
+}
+
+Enum order_status {
+  NEW
+  PARTIALLY_FILLED
+  FILLED
+  CANCELLED
+}
+
+Enum ledger_transaction_type {
+  DEPOSIT
+  WITHDRAWAL
+  TRADE_SETTLEMENT
+  TRADE_FEE
+  ORDER_LOCK
+  ORDER_UNLOCK
+}
+
+Enum ledger_entry_direction {
+  DEBIT
+  CREDIT
+}
+
+TableGroup iam {
+  users
+  roles
+  user_roles
+}
+
+TableGroup market {
+  currencies
+  trading_pairs
+  user_favorite_pairs
+}
+
+TableGroup clearing {
+  wallets
+  ledger_journals
+  ledger_entries
+}
+
+TableGroup trading {
+  orders
+  trades
+  outbox_events
+}
+
+Table users {
+  id bigint [pk, increment]
+  email varchar(255) [unique, not null]
+  password_hash varchar(255) [not null]
+  username varchar(64) [unique, not null]
+  kyc_status kyc_status [not null, default: 'PENDING']
+  is_active boolean [not null, default: true]
+  created_at timestamptz [not null]
+  updated_at timestamptz [not null]
+}
+
+Table roles {
+  id bigint [pk, increment]
+  code varchar(32) [unique, not null]
+  name varchar(64) [not null]
+  description varchar(255)
+  created_at timestamptz [not null]
+}
+
+Table user_roles {
+  user_id bigint [pk, not null, ref: > users.id]
+  role_id bigint [pk, not null, ref: > roles.id]
+  assigned_at timestamptz [not null]
+}
+
+Table currencies {
+  id bigint [pk, increment]
+  code varchar(16) [unique, not null]
+  name varchar(64) [not null]
+  decimals smallint [not null]
+  is_active boolean [not null, default: true]
+  created_at timestamptz [not null]
+}
+
+Table trading_pairs {
+  id bigint [pk, increment]
+  symbol varchar(32) [unique, not null]
+  base_currency_id bigint [not null, ref: > currencies.id]
+  quote_currency_id bigint [not null, ref: > currencies.id]
+  min_order_amount decimal(36,18) [not null, default: 0]
+  tick_size decimal(36,18) [not null, default: 0.01]
+  lot_size decimal(36,18) [not null, default: 0.00000001]
+  is_active boolean [not null, default: true]
+  created_at timestamptz [not null]
+}
+
+Table user_favorite_pairs {
+  user_id bigint [pk, not null, ref: > users.id]
+  trading_pair_id bigint [pk, not null, ref: > trading_pairs.id]
+  added_at timestamptz [not null]
+}
+
+Table wallets {
+  id bigint [pk, increment]
+  user_id bigint [not null, ref: > users.id]
+  currency_id bigint [not null, ref: > currencies.id]
+  available_balance decimal(36,18) [not null, default: 0]
+  locked_balance decimal(36,18) [not null, default: 0]
+  version bigint [not null, default: 0]
+  created_at timestamptz [not null]
+  updated_at timestamptz [not null]
+
+  indexes {
+    (user_id, currency_id) [unique]
+  }
+}
+
+Table orders {
+  id uuid [pk]
+  user_id bigint [not null, ref: > users.id]
+  trading_pair_id bigint [not null, ref: > trading_pairs.id]
+  client_order_id varchar(64)
+  side order_side [not null]
+  type order_type [not null]
+  price decimal(36,18)
+  quantity decimal(36,18) [not null]
+  filled_quantity decimal(36,18) [not null, default: 0]
+  status order_status [not null, default: 'NEW']
+  created_at timestamptz [not null]
+  updated_at timestamptz [not null]
+
+  indexes {
+    (user_id, client_order_id) [unique]
+  }
+}
+
+Table trades {
+  id uuid [pk]
+  trading_pair_id bigint [not null, ref: > trading_pairs.id]
+  buy_order_id uuid [not null, ref: > orders.id]
+  sell_order_id uuid [not null, ref: > orders.id]
+  buyer_id bigint [not null, ref: > users.id]
+  seller_id bigint [not null, ref: > users.id]
+  maker_order_id uuid [not null, ref: > orders.id]
+  taker_order_id uuid [not null, ref: > orders.id]
+  price decimal(36,18) [not null]
+  quantity decimal(36,18) [not null]
+  executed_at timestamptz [not null]
+}
+
+Table ledger_journals {
+  id bigint [pk, increment]
+  event_id uuid [unique, not null]
+  transaction_type ledger_transaction_type [not null]
+  reference_id uuid
+  description varchar(255)
+  created_at timestamptz [not null]
+}
+
+Table ledger_entries {
+  id bigint [pk, increment]
+  journal_id bigint [not null, ref: > ledger_journals.id]
+  wallet_id bigint [not null, ref: > wallets.id]
+  direction ledger_entry_direction [not null]
+  amount decimal(36,18) [not null]
+  created_at timestamptz [not null]
+}
+
+Table outbox_events {
+  id uuid [pk]
+  aggregate_type varchar(32) [not null]
+  aggregate_id varchar(64) [not null]
+  event_type varchar(64) [not null]
+  payload json [not null]
+  processed boolean [not null, default: false]
+  processed_at timestamptz
+  retry_count int [not null, default: 0]
+  last_error text
+  created_at timestamptz [not null]
+}
