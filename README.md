@@ -5,7 +5,7 @@
 
 ## SonarCloud
 
-https://sonarcloud.io/project/overview?id=YOUR_PROJECT_KEY
+
 
 ## План
 
