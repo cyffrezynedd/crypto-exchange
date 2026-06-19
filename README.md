@@ -16,8 +16,8 @@ https://sonarcloud.io/project/overview?id=cyffrezynedd_crypto-exchange
 
 
 | Этап | Задача | Запланированное время | Фактическое время |
-|------|--------|-----:|-----:|
-| 1 | БД — схема (мин. 7 таблиц, M2M), PostgreSQL, схему и SQL в git | 3.2ч | |
+|------|--------|-----:|-------------------:|
+| 1 | БД — схема (мин. 7 таблиц, M2M), PostgreSQL, схему и SQL в git | 3.2ч | 2.5ч |
 | 2 | JDBC — консольное приложение, CRUD (отдельная ветка) | | |
 | 3 | Backend — Spring Boot + Hibernate | | |
 | 4 | Frontend — Angular | | |
