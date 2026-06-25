@@ -12,6 +12,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-crypto_exchange}
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./backend/migrations:/migrations:ro
+      - ./devtools/jdbc:/devtools/jdbc:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-crypto_exchange}"]
       interval: 5s

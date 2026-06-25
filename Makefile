@@ -38,13 +38,15 @@ db-reset: db-down
 
 migrate: db-wait
 	@echo Applying migrations...
-	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/migrate.ps1
+	docker compose exec -e POSTGRES_USER=$(POSTGRES_USER) -e POSTGRES_DB=$(POSTGRES_DB) postgres sh /devtools/jdbc/migrate.sh
 
 psql: db-wait
 	docker compose exec postgres psql -U $(POSTGRES_USER) -d $(POSTGRES_DB)
 
+JDK21_HOME := C:/PROGRA~1/ECLIPS~1/JDK-21~1.9-H
+
 run-jdbc:
-	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/run-jdbc.ps1
+	@cmd /V:ON /C "set JAVA_HOME=$(JDK21_HOME)&& set PATH=!JAVA_HOME!\bin;!PATH!&& cd $(JDBC_DIR) && mvn -q compile exec:java"
 
 smoke: db-wait
-	powershell -NoProfile -Command "Get-Content devtools/jdbc/smoke.sql -Raw | docker compose exec -T postgres psql -U $(POSTGRES_USER) -d $(POSTGRES_DB)"
+	docker compose exec -T postgres psql -U $(POSTGRES_USER) -d $(POSTGRES_DB) -f /devtools/jdbc/smoke.sql
