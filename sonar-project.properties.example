@@ -1,0 +1,4 @@
+sonar.organization=org
+sonar.projectKey=key
+
+sonar.exclusions=backend/migrations/**,docs/**,**/*.sql,**/*.dbml,**/*.png
