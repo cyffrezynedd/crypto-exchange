@@ -15,6 +15,10 @@ import java.util.Scanner;
 
 public class ConsoleApp {
 
+    private static final String MSG_UNKNOWN_OPTION = "Unknown option";
+    private static final String MSG_NOT_FOUND = "Not found";
+    private static final String PROMPT_USER_ID = "user_id";
+
     private final InputReader input;
     private final UserDao userDao = new UserDao();
     private final CurrencyDao currencyDao = new CurrencyDao();
@@ -37,7 +41,7 @@ public class ConsoleApp {
                     case "2" -> currencyMenu();
                     case "3" -> userRoleMenu();
                     case "0" -> running = false;
-                    default -> System.out.println("Unknown option");
+                    default -> System.out.println(MSG_UNKNOWN_OPTION);
                 }
             } catch (SQLException e) {
                 System.out.println("Database error: " + e.getMessage());
@@ -71,7 +75,7 @@ public class ConsoleApp {
                 case "4" -> updateUser();
                 case "5" -> deleteUser();
                 case "0" -> back = true;
-                default -> System.out.println("Unknown option");
+                default -> System.out.println(MSG_UNKNOWN_OPTION);
             }
         }
     }
@@ -91,7 +95,7 @@ public class ConsoleApp {
                 case "4" -> updateCurrency();
                 case "5" -> deleteCurrency();
                 case "0" -> back = true;
-                default -> System.out.println("Unknown option");
+                default -> System.out.println(MSG_UNKNOWN_OPTION);
             }
         }
     }
@@ -111,7 +115,7 @@ public class ConsoleApp {
                 case "4" -> removeRole();
                 case "5" -> listRoles();
                 case "0" -> back = true;
-                default -> System.out.println("Unknown option");
+                default -> System.out.println(MSG_UNKNOWN_OPTION);
             }
         }
     }
@@ -132,14 +136,14 @@ public class ConsoleApp {
 
     private void findUser() throws SQLException {
         Optional<User> user = userDao.findById(input.readLong("id"));
-        System.out.println(user.map(Object::toString).orElse("Not found"));
+        System.out.println(user.map(Object::toString).orElse(MSG_NOT_FOUND));
     }
 
     private void updateUser() throws SQLException {
         long id = input.readLong("id");
         Optional<User> existing = userDao.findById(id);
         if (existing.isEmpty()) {
-            System.out.println("Not found");
+            System.out.println(MSG_NOT_FOUND);
             return;
         }
 
@@ -149,7 +153,7 @@ public class ConsoleApp {
     }
 
     private void deleteUser() throws SQLException {
-        System.out.println(userDao.delete(input.readLong("id")) ? "Deleted" : "Not found");
+        System.out.println(userDao.delete(input.readLong("id")) ? "Deleted" : MSG_NOT_FOUND);
     }
 
     private User readUser(User defaults) {
@@ -178,14 +182,14 @@ public class ConsoleApp {
 
     private void findCurrency() throws SQLException {
         Optional<Currency> currency = currencyDao.findById(input.readLong("id"));
-        System.out.println(currency.map(Object::toString).orElse("Not found"));
+        System.out.println(currency.map(Object::toString).orElse(MSG_NOT_FOUND));
     }
 
     private void updateCurrency() throws SQLException {
         long id = input.readLong("id");
         Optional<Currency> existing = currencyDao.findById(id);
         if (existing.isEmpty()) {
-            System.out.println("Not found");
+            System.out.println(MSG_NOT_FOUND);
             return;
         }
 
@@ -195,7 +199,7 @@ public class ConsoleApp {
     }
 
     private void deleteCurrency() throws SQLException {
-        System.out.println(currencyDao.delete(input.readLong("id")) ? "Deleted" : "Not found");
+        System.out.println(currencyDao.delete(input.readLong("id")) ? "Deleted" : MSG_NOT_FOUND);
     }
 
     private Currency readCurrency(Currency defaults) {
@@ -215,7 +219,7 @@ public class ConsoleApp {
     }
 
     private void assignRole() throws SQLException {
-        long userId = input.readLong("user_id");
+        long userId = input.readLong(PROMPT_USER_ID);
         long roleId = input.readLong("role_id");
 
         if (userDao.findById(userId).isEmpty()) {
@@ -232,7 +236,7 @@ public class ConsoleApp {
     }
 
     private void listByUser() throws SQLException {
-        listAssignments(userRoleDao.findByUserId(input.readLong("user_id")));
+        listAssignments(userRoleDao.findByUserId(input.readLong(PROMPT_USER_ID)));
     }
 
     private void listAssignments(List<UserRoleAssignment> assignments) {
@@ -244,9 +248,9 @@ public class ConsoleApp {
     }
 
     private void removeRole() throws SQLException {
-        long userId = input.readLong("user_id");
+        long userId = input.readLong(PROMPT_USER_ID);
         long roleId = input.readLong("role_id");
-        System.out.println(userRoleDao.remove(userId, roleId) ? "Removed" : "Not found");
+        System.out.println(userRoleDao.remove(userId, roleId) ? "Removed" : MSG_NOT_FOUND);
     }
 
     private void listRoles() throws SQLException {
