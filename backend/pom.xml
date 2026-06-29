@@ -33,6 +33,10 @@
         <grpc.version>1.68.2</grpc.version>
         <os-maven-plugin.version>1.7.1</os-maven-plugin.version>
         <protobuf-maven-plugin.version>0.6.1</protobuf-maven-plugin.version>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.organization>cyffrezynedd</sonar.organization>
+        <sonar.projectKey>cyffrezynedd_crypto-exchange</sonar.projectKey>
+        <sonar.exclusions>migrations/**,**/target/**,**/*.sql,**/generated/**</sonar.exclusions>
     </properties>
 
     <dependencyManagement>
