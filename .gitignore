@@ -4,6 +4,8 @@
 .env
 sonar-project.properties
 
+devtools/smoke-api.ps1
+
 target/
 **/target/
 
