@@ -1,4 +1,4 @@
-CREATE TABLE ledger_journals (
+CREATE TABLE clearing.ledger_journals (
     id                  BIGSERIAL       PRIMARY KEY,
     event_id            UUID            NOT NULL,
     transaction_type    ledger_transaction_type NOT NULL,
@@ -9,13 +9,13 @@ CREATE TABLE ledger_journals (
     CONSTRAINT uq_ledger_journals_event_id UNIQUE (event_id)
 );
 
-CREATE INDEX idx_ledger_journals_reference_id ON ledger_journals (reference_id);
-CREATE INDEX idx_ledger_journals_created_at ON ledger_journals (created_at DESC);
+CREATE INDEX idx_ledger_journals_reference_id ON clearing.ledger_journals (reference_id);
+CREATE INDEX idx_ledger_journals_created_at ON clearing.ledger_journals (created_at DESC);
 
-CREATE TABLE ledger_entries (
+CREATE TABLE clearing.ledger_entries (
     id                  BIGSERIAL       PRIMARY KEY,
-    journal_id          BIGINT          NOT NULL REFERENCES ledger_journals (id) ON DELETE RESTRICT,
-    wallet_id           BIGINT          NOT NULL REFERENCES wallets (id),
+    journal_id          BIGINT          NOT NULL REFERENCES clearing.ledger_journals (id) ON DELETE RESTRICT,
+    wallet_id           BIGINT          NOT NULL REFERENCES clearing.wallets (id),
     direction           ledger_entry_direction NOT NULL,
     amount              NUMERIC(36, 18) NOT NULL,
     created_at          TIMESTAMPTZ     NOT NULL DEFAULT NOW(),
@@ -23,5 +23,5 @@ CREATE TABLE ledger_entries (
     CONSTRAINT chk_ledger_entries_amount_positive CHECK (amount > 0)
 );
 
-CREATE INDEX idx_ledger_entries_journal_id ON ledger_entries (journal_id);
-CREATE INDEX idx_ledger_entries_wallet_id ON ledger_entries (wallet_id);
+CREATE INDEX idx_ledger_entries_journal_id ON clearing.ledger_entries (journal_id);
+CREATE INDEX idx_ledger_entries_wallet_id ON clearing.ledger_entries (wallet_id);

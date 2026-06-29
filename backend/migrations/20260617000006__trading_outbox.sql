@@ -1,4 +1,4 @@
-CREATE TABLE outbox_events (
+CREATE TABLE trading.outbox_events (
     id                  UUID            PRIMARY KEY DEFAULT gen_random_uuid(),
     aggregate_type      VARCHAR(32)     NOT NULL,
     aggregate_id        VARCHAR(64)     NOT NULL,
@@ -14,5 +14,5 @@ CREATE TABLE outbox_events (
 );
 
 CREATE INDEX idx_outbox_events_unprocessed
-    ON outbox_events (created_at)
+    ON trading.outbox_events (created_at)
     WHERE processed = FALSE;

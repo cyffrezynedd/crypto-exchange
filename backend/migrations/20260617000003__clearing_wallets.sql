@@ -1,7 +1,7 @@
-CREATE TABLE wallets (
+CREATE TABLE clearing.wallets (
     id                  BIGSERIAL       PRIMARY KEY,
-    user_id             BIGINT          NOT NULL REFERENCES users (id),
-    currency_id         BIGINT          NOT NULL REFERENCES currencies (id),
+    user_id             BIGINT          NOT NULL REFERENCES iam.users (id),
+    currency_id         BIGINT          NOT NULL REFERENCES market.currencies (id),
     available_balance   NUMERIC(36, 18) NOT NULL DEFAULT 0,
     locked_balance      NUMERIC(36, 18) NOT NULL DEFAULT 0,
     version             BIGINT          NOT NULL DEFAULT 0,
@@ -13,5 +13,5 @@ CREATE TABLE wallets (
     CONSTRAINT chk_wallets_locked_nonneg CHECK (locked_balance >= 0)
 );
 
-CREATE INDEX idx_wallets_user_id ON wallets (user_id);
-CREATE INDEX idx_wallets_currency_id ON wallets (currency_id);
+CREATE INDEX idx_wallets_user_id ON clearing.wallets (user_id);
+CREATE INDEX idx_wallets_currency_id ON clearing.wallets (currency_id);
