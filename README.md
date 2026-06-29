@@ -19,7 +19,7 @@ https://sonarcloud.io/project/overview?id=cyffrezynedd_crypto-exchange
 |------|--------|-----:|-------------------:|
 | 1 | БД — схема (мин. 7 таблиц, M2M), PostgreSQL, схему и SQL в git | 3.2ч | 2.5ч |
 | 2 | JDBC — консольное приложение, CRUD (отдельная ветка) | 2.3ч | 2ч |
-| 3 | Backend — Spring Boot + Hibernate | | |
+| 3 | Backend — Spring Boot + Hibernate | 16.5ч | 14ч |
 | 4 | Frontend — Angular | | |
 | 5 | Frontend — React | | |
 | 6 | Запуск приложения в Docker | | |
@@ -68,3 +68,58 @@ make run-jdbc
 ```
 
 Нужен `make` (Git Bash / `choco install make`) и Docker.
+
+## Этап 3 — Spring Boot + Hibernate (ветка `main`)
+
+Микросервисы в `backend/` (гексагональная архитектура: `domain` / `port` / `adapter`):
+
+| Сервис | Порт | Назначение |
+|--------|-----:|------------|
+| `api-gateway` | 8080 | маршрутизация, JWT, CORS, circuit breaker |
+| `iam-service` | 8081 | пользователи, роли, авторизация, аутентификация |
+| `clearing-service` | 8082 | кошельки |
+| `trading-service` | 8083 | ордера, outbox паттерн при помощи кафки |
+| `market-data-service` | 8084 | торговые пары, проекция сделок |
+| `exchange-common` | — | DTO, JWT, proto, общие ошибки |
+
+Инфраструктура (`docker-compose.yml`): PostgreSQL, Redis, Kafka, Consul, SQL-миграции.
+
+Gateway-маршруты (версия **v1**): `/api/v1/iam`, `/api/v1/trading`, `/api/v1/clearing`, `/api/v1/market`  
+Публичные пути без JWT: `POST /api/v1/iam/users`, `POST /api/v1/iam/auth/login`, `POST /api/v1/iam/auth/refresh`, `GET /api/v1/market/pairs`  
+Мета: `GET /api/gateway/info` (поля `version`, `apiVersion`)  
+
+Оценка времени (этап 3):
+
+- пессимистичная (P) — 24 ч
+- оптимистичная (O) — 12 ч
+- наиболее вероятная (BG) — 16 ч
+
+`E = (P + O + 4 * BG) / 6 = (24 + 12 + 4 * 16) / 6 = 100 / 6 ≈ 16.5 ч`
+
+### Сборка и тесты
+
+```bash
+cp .env.example .env
+cd backend && mvn test
+```
+
+### Запуск
+
+Полный бэкенд (PostgreSQL, Redis, Kafka, Consul, все сервисы). Снаружи доступен только gateway **:8080**:
+
+```bash
+make up
+make smoke-api
+```
+
+Остановка: `make down`
+
+Локальная отладка отдельных сервисов (инфра в Docker, Java на хосте):
+
+```bash
+make infra-up
+make migrate
+cd backend && mvn install
+make run-iam
+make run-gateway
+```
