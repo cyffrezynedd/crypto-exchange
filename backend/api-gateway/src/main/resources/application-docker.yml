@@ -1,0 +1,19 @@
+spring:
+  cloud:
+    consul:
+      host: ${CONSUL_HOST:consul}
+      port: 8500
+      discovery:
+        enabled: true
+        register: false
+
+gateway:
+  discovery:
+    consul-enabled: true
+
+management:
+  health:
+    consul:
+      enabled: false
+    discovery:
+      enabled: false

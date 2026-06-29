@@ -1,0 +1,17 @@
+package com.exchange.iam.port.in;
+
+import com.exchange.iam.domain.model.KycStatus;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+public record UpdateUserCommand(
+        @NotNull Long id,
+        @NotBlank @Email String email,
+        @Size(min = 8, max = 72) String password,
+        @NotBlank @Size(max = 64) String username,
+        @NotNull KycStatus kycStatus,
+        @NotNull Boolean active
+) {
+}

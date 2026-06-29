@@ -1,0 +1,46 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: iam-service
+  datasource:
+    url: jdbc:postgresql://localhost:5433/crypto_exchange
+    username: postgres
+    password: postgres
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        default_schema: iam
+        jdbc:
+          time_zone: UTC
+  cloud:
+    consul:
+      host: ${CONSUL_HOST:localhost}
+      port: ${CONSUL_PORT:8500}
+      discovery:
+        enabled: ${CONSUL_DISCOVERY_ENABLED:false}
+        register: ${CONSUL_DISCOVERY_ENABLED:false}
+        prefer-ip-address: true
+        health-check-path: /actuator/health
+        instance-id: ${spring.application.name}:${server.port}
+
+iam:
+  jwt:
+    secret: ${JWT_SECRET:dev-only-change-me-exchange-jwt-secret-key-32chars}
+    access-ttl-seconds: 900
+    refresh-ttl-seconds: 604800
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  health:
+    consul:
+      enabled: false
+    discovery:
+      enabled: false

@@ -1,0 +1,45 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: market-data-service
+  cloud:
+    consul:
+      host: ${CONSUL_HOST:localhost}
+      port: ${CONSUL_PORT:8500}
+      discovery:
+        enabled: ${CONSUL_DISCOVERY_ENABLED:false}
+        register: ${CONSUL_DISCOVERY_ENABLED:false}
+        prefer-ip-address: true
+        health-check-path: /actuator/health
+        instance-id: ${spring.application.name}:${server.port}
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: market-data-service
+      topic: exchange.domain.events
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+market-data:
+  max-recent-trades: 100
+  pair-symbols:
+    1: BTC_USDT
+    2: ETH_USDT
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  health:
+    consul:
+      enabled: false
+    discovery:
+      enabled: false

@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/crypto_exchange
+  cloud:
+    consul:
+      host: consul
+      discovery:
+        enabled: true
+        register: true
+
+management:
+  health:
+    consul:
+      enabled: false
+    discovery:
+      enabled: false

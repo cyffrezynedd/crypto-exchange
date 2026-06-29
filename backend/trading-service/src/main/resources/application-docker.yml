@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/crypto_exchange
+  cloud:
+    consul:
+      host: consul
+      discovery:
+        enabled: true
+        register: true
+  kafka:
+    bootstrap-servers: kafka:9092
+
+clearing:
+  service:
+    base-url: http://clearing-service:8082
+
+management:
+  health:
+    consul:
+      enabled: false
+    discovery:
+      enabled: false

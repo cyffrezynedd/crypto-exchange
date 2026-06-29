@@ -1,0 +1,15 @@
+**/src
+**/target/classes
+**/target/generated-sources
+**/target/generated-test-sources
+**/target/maven-archiver
+**/target/maven-status
+**/target/surefire-reports
+**/target/test-classes
+**/*.original
+**/pom.xml
+!iam-service/target/*-SNAPSHOT.jar
+!clearing-service/target/*-SNAPSHOT.jar
+!trading-service/target/*-SNAPSHOT.jar
+!market-data-service/target/*-SNAPSHOT.jar
+!api-gateway/target/*-SNAPSHOT.jar

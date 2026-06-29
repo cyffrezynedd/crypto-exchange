@@ -1,0 +1,56 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: trading-service
+  datasource:
+    url: jdbc:postgresql://localhost:5433/crypto_exchange
+    username: postgres
+    password: postgres
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        default_schema: trading
+        jdbc:
+          time_zone: UTC
+  cloud:
+    consul:
+      host: ${CONSUL_HOST:localhost}
+      port: ${CONSUL_PORT:8500}
+      discovery:
+        enabled: ${CONSUL_DISCOVERY_ENABLED:false}
+        register: ${CONSUL_DISCOVERY_ENABLED:false}
+        prefer-ip-address: true
+        health-check-path: /actuator/health
+        instance-id: ${spring.application.name}:${server.port}
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+      retries: 3
+
+clearing:
+  service:
+    base-url: http://localhost:8082
+
+trading:
+  outbox:
+    topic: exchange.domain.events
+    batch-size: 100
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  health:
+    consul:
+      enabled: false
+    discovery:
+      enabled: false

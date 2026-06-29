@@ -1,0 +1,80 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+    version: 1.0.0
+  cloud:
+    consul:
+      host: ${CONSUL_HOST:localhost}
+      port: ${CONSUL_PORT:8500}
+      discovery:
+        enabled: false
+        register: false
+    gateway:
+      httpclient:
+        connect-timeout: 3000
+        response-timeout: 10s
+      discovery:
+        enabled: true
+
+gateway:
+  discovery:
+    consul-enabled: ${GATEWAY_CONSUL_ENABLED:false}
+  jwt:
+    enabled: true
+    secret: ${JWT_SECRET:dev-only-change-me-exchange-jwt-secret-key-32chars}
+    access-ttl-seconds: 900
+    refresh-ttl-seconds: 604800
+  services:
+    iam-uri: ${IAM_SERVICE_URI:http://localhost:8081}
+    clearing-uri: ${CLEARING_SERVICE_URI:http://localhost:8082}
+    trading-uri: ${TRADING_SERVICE_URI:http://localhost:8083}
+    market-uri: ${MARKET_DATA_SERVICE_URI:http://localhost:8084}
+  public-paths:
+    - /actuator
+    - /api/gateway
+    - POST:/api/v1/iam/users
+    - POST:/api/v1/iam/auth/login
+    - POST:/api/v1/iam/auth/refresh
+    - GET:/api/v1/market/pairs
+    - GET:/api/v1/market/pairs/**
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway
+  health:
+    consul:
+      enabled: false
+    discovery:
+      enabled: false
+  endpoint:
+    gateway:
+      enabled: true
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      iamService:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+      tradingService:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+      clearingService:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+      marketDataService:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+
+logging:
+  level:
+    com.exchange.gateway: INFO
