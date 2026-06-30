@@ -32,9 +32,17 @@ public class DomainEventConsumer {
 
         switch (eventType) {
             case EventType.ORDER_CREATED -> handleOrderCreated(root);
+            case EventType.ORDER_CANCELLED -> handleOrderCancelled(root);
             case EventType.TRADE_EXECUTED -> handleTradeExecuted(root);
             default -> log.trace("Ignoring event type {}", eventType);
         }
+    }
+
+    private void handleOrderCancelled(JsonNode root) {
+        JsonNode payload = root.path("payload");
+        String orderId = payload.path("orderId").asText();
+        long tradingPairId = payload.path("tradingPairId").asLong();
+        projectionService.onOrderCancelled(orderId, tradingPairId);
     }
 
     private void handleOrderCreated(JsonNode root) throws JsonProcessingException {
