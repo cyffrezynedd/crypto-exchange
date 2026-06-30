@@ -43,3 +43,16 @@ management:
       enabled: false
     discovery:
       enabled: false
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: false
+  paths-to-exclude: /internal/**
+  show-actuator: false
+
+exchange:
+  gateway-trust:
+    enabled: false
+    secret: ${GATEWAY_INTERNAL_SECRET:}
