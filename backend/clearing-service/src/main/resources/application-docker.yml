@@ -8,6 +8,15 @@ spring:
         enabled: true
         register: true
 
+clearing:
+  features:
+    deposit-enabled: true
+
+exchange:
+  gateway-trust:
+    enabled: true
+    secret: ${GATEWAY_INTERNAL_SECRET:dev-gateway-internal-secret}
+
 management:
   health:
     consul:
