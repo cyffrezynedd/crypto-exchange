@@ -25,7 +25,7 @@ help:
 	@echo   make build       - mvn install all backend modules
 	@echo   make run-iam     - run iam-service (needs db + migrate)
 	@echo   make run-gateway - run api-gateway
-	@echo   make up          - docker compose up --build (full stack)
+	@echo   make up          - docker compose up --build (full stack + ui)
 	@echo   make down        - stop all containers
 	@echo   make smoke       - quick db check
 	@echo   make smoke-api   - HTTP smoke test via gateway (services must be running)

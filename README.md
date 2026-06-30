@@ -22,7 +22,7 @@ https://sonarcloud.io/project/overview?id=cyffrezynedd_crypto-exchange
 | 3 | Backend — Spring Boot + Hibernate | 16.5ч | 14ч |
 | 4 | Frontend — React | 8ч | 9ч |
 | 5 | Frontend — Angular | 8ч | 7.5ч |
-| 6 | Запуск приложения в Docker | | |
+| 6 | Запуск приложения в Docker | 1.1ч | 1ч |
 
 ## Этап 1 — БД
 
@@ -172,3 +172,37 @@ npm start
 ```
 
 dev-сервер: http://localhost:4200
+
+## Этап 6 — Docker (полный стек)
+
+Добавлен контейнер **frontend** — production-сборка React за nginx; `/api` проксируется на gateway
+
+Angular остаётся для локалки только (`make run-angular`)
+
+Оценка времени (этап 6):
+
+- пессимистичная (P) — 2 ч
+- оптимистичная (O) — 0.5 ч
+- наиболее вероятная (BG) — 1 ч
+
+`E = (P + O + 4 * BG) / 6 = (2 + 0.5 + 4 * 1) / 6 = 6.5 / 6 ≈ 1.1 ч`
+
+Фактически: **1 ч**
+
+```bash
+cp .env.example .env
+make up
+```
+
+| URL | Назначение |
+|-----|------------|
+| http://localhost:3000 | React |
+| http://localhost:8080 | API gateway |
+
+Локальная разработка фронта:
+
+```bash
+make up
+make run-react
+# или make run-angular
+```

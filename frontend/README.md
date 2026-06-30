@@ -1,9 +1,9 @@
 # Frontend
 
-| Папка | Стек | Порт | Главная |
-|-------|------|-----:|---------|
-| `react/` | Vite + React 18 | 5173 | Избранные пары (M2M grid) |
-| `angular/` | Angular 19 | 4200 | То же самое |
+| Папка | Стек | Порт (dev) | Docker |
+|-------|------|-----:|--------|
+| `react/` | Vite + React 18 | 5173 | **:3000** (`make up`) |
+| `angular/` | Angular 19 | 4200 | только dev |
 
 ## API (через gateway `/api/v1`)
 
@@ -14,6 +14,8 @@
 
 ```bash
 make up
+# UI: http://localhost:3000
+
 cd react && npm install && npm run dev
 cd angular && npm install && npm start
 ```

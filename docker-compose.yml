@@ -190,5 +190,16 @@ services:
       market-data-service:
         condition: service_started
 
+  frontend:
+    build:
+      context: ./frontend/react
+      dockerfile: Dockerfile
+    container_name: crypto_exchange_frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      api-gateway:
+        condition: service_started
+
 volumes:
   pgdata:
