@@ -1,5 +1,6 @@
 package com.exchange.trading.adapter.in.web;
 
+import com.exchange.common.web.GatewayHeaders;
 import com.exchange.common.web.PageResponse;
 import com.exchange.trading.adapter.in.web.dto.OrderResponse;
 import com.exchange.trading.adapter.in.web.dto.PlaceOrderRequest;
@@ -27,9 +28,6 @@ import java.util.UUID;
 @RequestMapping("/orders")
 public class OrderController {
 
-    public static final String USER_ID_HEADER = "X-User-Id";
-    public static final String USERNAME_HEADER = "X-Username";
-
     private final OrderUseCase orderUseCase;
 
     public OrderController(OrderUseCase orderUseCase) {
@@ -39,8 +37,8 @@ public class OrderController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public OrderResponse place(
-            @RequestHeader(USER_ID_HEADER) Long userId,
-            @RequestHeader(value = USERNAME_HEADER, required = false) String username,
+            @RequestHeader(GatewayHeaders.USER_ID_HEADER) Long userId,
+            @RequestHeader(value = GatewayHeaders.USERNAME_HEADER, required = false) String username,
             @Valid @RequestBody PlaceOrderRequest request
     ) {
         return OrderResponse.from(orderUseCase.placeOrder(request.toCommand(userId, username)));
@@ -48,7 +46,7 @@ public class OrderController {
 
     @DeleteMapping("/{id}")
     public OrderResponse cancel(
-            @RequestHeader(USER_ID_HEADER) Long userId,
+            @RequestHeader(GatewayHeaders.USER_ID_HEADER) Long userId,
             @PathVariable UUID id
     ) {
         return OrderResponse.from(orderUseCase.cancelOrder(new CancelOrderCommand(userId, id)));
@@ -56,7 +54,7 @@ public class OrderController {
 
     @GetMapping
     public PageResponse<OrderResponse> list(
-            @RequestHeader(USER_ID_HEADER) Long userId,
+            @RequestHeader(GatewayHeaders.USER_ID_HEADER) Long userId,
             @RequestParam(required = false) OrderSide side,
             @RequestParam(required = false) OrderStatus status,
             @RequestParam(required = false) Long tradingPairId,
@@ -77,7 +75,7 @@ public class OrderController {
 
     @GetMapping("/{id}")
     public OrderResponse get(
-            @RequestHeader(USER_ID_HEADER) Long userId,
+            @RequestHeader(GatewayHeaders.USER_ID_HEADER) Long userId,
             @PathVariable UUID id
     ) {
         return OrderResponse.from(orderUseCase.getOrder(userId, id));
