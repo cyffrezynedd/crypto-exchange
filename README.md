@@ -206,3 +206,24 @@ make up
 make run-react
 # или make run-angular
 ```
+
+## API и Swagger
+
+- Swagger UI: http://localhost:8080/swagger-ui/index.html (все сервисы через dropdown)
+- Экспорт OpenAPI: `make docs` → `docs/openapi/*.json`
+
+## Git и CI
+
+- Ветки и поток: [docs/BRANCHING.md](docs/BRANCHING.md) (`feature/*` → `dev` → `main`)
+- CI: `.github/workflows/ci.yml` — `mvn verify` + сборка React на push/PR в `main` и `dev`
+
+## Ограничения MVP
+
+Учебный проект; для продакшена потребуется доработка:
+
+- **Матчинг** — in-memory в trading-service, без персистентного стакана
+- **Сага** — упрощённый reserve/release через clearing HTTP, без полноценного orchestrator
+- **Безопасность** — gateway secret и internal API key включены в Docker; локально trust filter выключен
+- **Депозит** — отключён вне Docker (`clearing.features.deposit-enabled`)
+- **Токены** — refresh на фронте без silent renew / rotation
+- **Тесты** — unit в сервисах; интеграционные с Testcontainers — в планах
