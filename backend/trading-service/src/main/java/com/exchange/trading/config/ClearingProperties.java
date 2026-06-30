@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class ClearingProperties {
 
     private String baseUrl = "http://localhost:8082";
+    private String internalApiKey = "";
 
     public String getBaseUrl() {
         return baseUrl;
@@ -13,5 +14,13 @@ public class ClearingProperties {
 
     public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
+    }
+
+    public String getInternalApiKey() {
+        return internalApiKey;
+    }
+
+    public void setInternalApiKey(String internalApiKey) {
+        this.internalApiKey = internalApiKey;
     }
 }

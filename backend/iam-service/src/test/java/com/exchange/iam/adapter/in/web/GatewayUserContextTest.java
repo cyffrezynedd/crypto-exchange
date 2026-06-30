@@ -2,6 +2,7 @@ package com.exchange.iam.adapter.in.web;
 
 import com.exchange.common.error.ErrorCode;
 import com.exchange.common.error.ExchangeException;
+import com.exchange.common.web.GatewayUserContext;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;

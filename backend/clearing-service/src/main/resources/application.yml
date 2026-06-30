@@ -39,7 +39,24 @@ management:
     discovery:
       enabled: false
 
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: false
+  paths-to-exclude: /internal/**
+  show-actuator: false
+
 clearing:
   platform-user-id: 0
   default-fee-rate: 0.001
   treasury-initial-balance: 1000000000
+  features:
+    deposit-enabled: false
+  internal-api:
+    key: ${INTERNAL_API_KEY:dev-internal-api-key}
+
+exchange:
+  gateway-trust:
+    enabled: false
+    secret: ${GATEWAY_INTERNAL_SECRET:}

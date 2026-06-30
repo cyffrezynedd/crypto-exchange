@@ -21,3 +21,8 @@ management:
       enabled: false
     discovery:
       enabled: false
+
+exchange:
+  gateway-trust:
+    enabled: true
+    secret: ${GATEWAY_INTERNAL_SECRET:dev-gateway-internal-secret}

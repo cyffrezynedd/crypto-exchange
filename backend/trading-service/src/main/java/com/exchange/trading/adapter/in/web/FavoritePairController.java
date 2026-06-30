@@ -1,5 +1,6 @@
 package com.exchange.trading.adapter.in.web;
 
+import com.exchange.common.web.GatewayHeaders;
 import com.exchange.common.web.PageResponse;
 import com.exchange.trading.adapter.in.web.dto.AddFavoritePairRequest;
 import com.exchange.trading.adapter.in.web.dto.FavoritePairResponse;
@@ -22,8 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/favorite-pairs")
 public class FavoritePairController {
 
-    public static final String USER_ID_HEADER = "X-User-Id";
-
     private final FavoritePairUseCase favoritePairUseCase;
 
     public FavoritePairController(FavoritePairUseCase favoritePairUseCase) {
@@ -32,7 +31,7 @@ public class FavoritePairController {
 
     @GetMapping
     public PageResponse<FavoritePairResponse> list(
-            @RequestHeader(USER_ID_HEADER) Long userId,
+            @RequestHeader(GatewayHeaders.USER_ID_HEADER) Long userId,
             @RequestParam(required = false) Long tradingPairId,
             @RequestParam(required = false) String symbol,
             @RequestParam(defaultValue = "0") int page,
@@ -44,7 +43,7 @@ public class FavoritePairController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public FavoritePairResponse add(
-            @RequestHeader(USER_ID_HEADER) Long userId,
+            @RequestHeader(GatewayHeaders.USER_ID_HEADER) Long userId,
             @Valid @RequestBody AddFavoritePairRequest request
     ) {
         return FavoritePairResponse.from(favoritePairUseCase.add(userId, request.tradingPairId()));
@@ -53,7 +52,7 @@ public class FavoritePairController {
     @DeleteMapping("/{tradingPairId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remove(
-            @RequestHeader(USER_ID_HEADER) Long userId,
+            @RequestHeader(GatewayHeaders.USER_ID_HEADER) Long userId,
             @PathVariable Long tradingPairId
     ) {
         favoritePairUseCase.remove(userId, tradingPairId);
