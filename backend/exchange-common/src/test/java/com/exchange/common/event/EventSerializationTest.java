@@ -26,7 +26,8 @@ class EventSerializationTest {
                 "60000.00",
                 "0.5",
                 "NEW",
-                Instant.parse("2026-06-25T12:00:00Z")
+                Instant.parse("2026-06-25T12:00:00Z"),
+                null
         );
 
         String json = mapper.writeValueAsString(event);
@@ -72,7 +73,8 @@ class EventSerializationTest {
                 "50000.00",
                 "1.0",
                 "NEW",
-                Instant.parse("2026-06-25T12:00:00Z")
+                Instant.parse("2026-06-25T12:00:00Z"),
+                null
         );
         OutboxEnvelope<OrderCreatedEvent> envelope = new OutboxEnvelope<>(
                 UUID.fromString("660e8400-e29b-41d4-a716-446655440000"),

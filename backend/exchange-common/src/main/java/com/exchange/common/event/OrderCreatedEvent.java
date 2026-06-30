@@ -16,6 +16,7 @@ public record OrderCreatedEvent(
         String price,
         String quantity,
         String status,
-        Instant createdAt
+        Instant createdAt,
+        String username
 ) {
 }
