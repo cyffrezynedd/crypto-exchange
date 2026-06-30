@@ -15,7 +15,7 @@ BACKEND_DIR := backend
 IAM_DIR := backend/iam-service
 GATEWAY_DIR := backend/api-gateway
 
-.PHONY: help db-up infra-up db-down db-reset db-wait migrate psql smoke smoke-api build run-iam run-gateway up down run-react run-angular
+.PHONY: help db-up infra-up db-down db-reset db-wait migrate psql smoke smoke-api build run-iam run-gateway up down run-react run-angular docs
 
 help:
 	@echo ""
@@ -29,6 +29,7 @@ help:
 	@echo   make down        - stop all containers
 	@echo   make smoke       - quick db check
 	@echo   make smoke-api   - HTTP smoke test via gateway (services must be running)
+	@echo   make docs        - export OpenAPI JSON from gateway
 	@echo   make run-react   - npm run dev (frontend/react, gateway must be up)
 	@echo   make run-angular - ng serve (frontend/angular, gateway must be up)
 	@echo ""
@@ -87,3 +88,17 @@ run-react:
 
 run-angular:
 	cd frontend/angular && npm start
+
+GATEWAY_URL ?= http://localhost:8080
+DOCS_DIR := docs/openapi
+
+docs:
+	@powershell -NoProfile -Command "New-Item -ItemType Directory -Force -Path '$(DOCS_DIR)' | Out-Null"
+	@echo Fetching OpenAPI specs from $(GATEWAY_URL)...
+	curl -sf $(GATEWAY_URL)/v3/api-docs -o $(DOCS_DIR)/gateway.json
+	curl -sf $(GATEWAY_URL)/api/v1/iam/v3/api-docs -o $(DOCS_DIR)/iam.json
+	curl -sf $(GATEWAY_URL)/api/v1/trading/v3/api-docs -o $(DOCS_DIR)/trading.json
+	curl -sf $(GATEWAY_URL)/api/v1/clearing/v3/api-docs -o $(DOCS_DIR)/clearing.json
+	curl -sf $(GATEWAY_URL)/api/v1/market/v3/api-docs -o $(DOCS_DIR)/market.json
+	@echo Saved to $(DOCS_DIR)/
+	@echo Swagger UI: $(GATEWAY_URL)/swagger-ui/index.html
