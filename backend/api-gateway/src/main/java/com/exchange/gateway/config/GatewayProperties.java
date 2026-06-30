@@ -12,6 +12,15 @@ public class GatewayProperties {
     private Services services = new Services();
     private Discovery discovery = new Discovery();
     private List<String> publicPaths = new ArrayList<>();
+    private String internalSecret = "";
+
+    public String getInternalSecret() {
+        return internalSecret;
+    }
+
+    public void setInternalSecret(String internalSecret) {
+        this.internalSecret = internalSecret;
+    }
 
     public Discovery getDiscovery() {
         return discovery;
