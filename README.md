@@ -22,7 +22,7 @@ https://sonarcloud.io/project/overview?id=cyffrezynedd_crypto-exchange
 | 3 | Backend — Spring Boot + Hibernate | 16.5ч | 14ч |
 | 4 | Frontend — React | 8ч | 9ч |
 | 5 | Frontend — Angular | 8ч | 7.5ч |
-| 6 | Запуск приложения в Docker | 1.1ч | 5ч |
+| 6 | Запуск приложения в Docker | 6ч | 5ч |
 
 ## Этап 1 — БД
 
