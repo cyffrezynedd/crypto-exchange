@@ -38,11 +38,18 @@ spring:
 clearing:
   service:
     base-url: http://localhost:8082
+    internal-api-key: ${INTERNAL_API_KEY:}
 
 trading:
   outbox:
     topic: exchange.domain.events
     batch-size: 100
+    max-retries: 10
+
+exchange:
+  gateway-trust:
+    enabled: false
+    secret: ${GATEWAY_INTERNAL_SECRET:}
 
 management:
   endpoints:
@@ -54,3 +61,11 @@ management:
       enabled: false
     discovery:
       enabled: false
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: false
+  paths-to-exclude: /internal/**
+  show-actuator: false
