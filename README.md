@@ -20,8 +20,8 @@ https://sonarcloud.io/project/overview?id=cyffrezynedd_crypto-exchange
 | 1 | БД — схема (мин. 7 таблиц, M2M), PostgreSQL, схему и SQL в git | 3.2ч | 2.5ч |
 | 2 | JDBC — консольное приложение, CRUD (отдельная ветка) | 2.3ч | 2ч |
 | 3 | Backend — Spring Boot + Hibernate | 16.5ч | 14ч |
-| 4 | Frontend — Angular | | |
-| 5 | Frontend — React | | |
+| 4 | Frontend — React | 8ч | 9ч |
+| 5 | Frontend — Angular | 8ч | 7.5ч |
 | 6 | Запуск приложения в Docker | | |
 
 ## Этап 1 — БД
@@ -123,3 +123,52 @@ cd backend && mvn install
 make run-iam
 make run-gateway
 ```
+
+## Этап 4 — React (`frontend/react`)
+
+SPA на Vite + React 18. Главный экран — **избранные пары (M2M)** с фильтрами и **пагинацией на backend**
+Также: рынок, ордера, кошельки, авторизация, фильтры + page/size
+
+Оценка времени (этап 4):
+
+- пессимистичная (P) — 12 ч
+- оптимистичная (O) — 6 ч
+- наиболее вероятная (BG) — 8 ч
+
+`E = (P + O + 4 * BG) / 6 = (12 + 6 + 4 * 8) / 6 = 50 / 6 ≈ 8.3 ч`
+
+Фактически: **9 ч**
+
+```bash
+make up
+cd frontend/react
+npm install
+cp .env.example .env
+npm run dev
+```
+
+dev-сервер: http://localhost:5173
+
+## Этап 5 — Angular (`frontend/angular`)
+
+Тот же API и визуал, что в React: главная — M2M избранные пары, рынок, ордера, кошельки 
+Standalone Angular 19, общие CSS из `frontend/react`
+
+Оценка времени (этап 5):
+
+- пессимистичная (P) — 11 ч
+- оптимистичная (O) — 5.5 ч
+- наиболее вероятная (BG) — 8 ч
+
+`E = (P + O + 4 * BG) / 6 = (11 + 5.5 + 4 * 8) / 6 = 48.5 / 6 ≈ 8.1 ч`
+
+Фактически: **7.5 ч**
+
+```bash
+make up
+cd frontend/angular
+npm install
+npm start
+```
+
+dev-сервер: http://localhost:4200
