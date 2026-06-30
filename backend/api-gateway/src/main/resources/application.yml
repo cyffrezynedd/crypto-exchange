@@ -22,6 +22,7 @@ spring:
 gateway:
   discovery:
     consul-enabled: ${GATEWAY_CONSUL_ENABLED:false}
+  internal-secret: ${GATEWAY_INTERNAL_SECRET:dev-gateway-internal-secret}
   jwt:
     enabled: true
     secret: ${JWT_SECRET:dev-only-change-me-exchange-jwt-secret-key-32chars}
@@ -35,11 +36,26 @@ gateway:
   public-paths:
     - /actuator
     - /api/gateway
+    - /swagger-ui
+    - /v3/api-docs
+    - /webjars
+    - GET:/api/v1/iam/v3/api-docs
+    - GET:/api/v1/trading/v3/api-docs
+    - GET:/api/v1/clearing/v3/api-docs
+    - GET:/api/v1/market/v3/api-docs
     - POST:/api/v1/iam/users
     - POST:/api/v1/iam/auth/login
     - POST:/api/v1/iam/auth/refresh
     - GET:/api/v1/market/pairs
     - GET:/api/v1/market/pairs/**
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui
+    use-root-path: false
+    disable-swagger-default-url: true
 
 management:
   endpoints:

@@ -6,6 +6,7 @@ import com.exchange.common.clearing.SettleTradeRequest;
 import com.exchange.common.clearing.UnfreezeFundsRequest;
 import com.exchange.common.error.ErrorCode;
 import com.exchange.common.error.ExchangeException;
+import com.exchange.common.web.GatewayHeaders;
 import com.exchange.trading.config.ClearingProperties;
 import com.exchange.trading.domain.model.Trade;
 import com.exchange.trading.domain.model.TradingPair;
@@ -26,9 +27,11 @@ class ClearingWebClientAdapter implements ClearingPort {
     private static final String SETTLE_PATH = "/internal/v1/trades/settle";
 
     private final WebClient webClient;
+    private final String internalApiKey;
 
     ClearingWebClientAdapter(WebClient.Builder webClientBuilder, ClearingProperties properties) {
         this.webClient = webClientBuilder.baseUrl(properties.getBaseUrl()).build();
+        this.internalApiKey = properties.getInternalApiKey();
     }
 
     @Override
@@ -81,6 +84,11 @@ class ClearingWebClientAdapter implements ClearingPort {
     private <T> T post(String path, Object body, Class<T> responseType) {
         return webClient.post()
                 .uri(path)
+                .headers(headers -> {
+                    if (internalApiKey != null && !internalApiKey.isBlank()) {
+                        headers.set(GatewayHeaders.INTERNAL_API_HEADER, internalApiKey);
+                    }
+                })
                 .bodyValue(body)
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, clientResponse -> clientResponse.bodyToMono(String.class)

@@ -3,6 +3,8 @@ package com.exchange.iam.adapter.in.web;
 import com.exchange.iam.adapter.in.web.dto.CreateUserRequest;
 import com.exchange.iam.adapter.in.web.dto.UpdateUserRequest;
 import com.exchange.iam.adapter.in.web.dto.UserResponse;
+import com.exchange.common.web.GatewayHeaders;
+import com.exchange.common.web.GatewayUserContext;
 import com.exchange.iam.port.in.UserUseCase;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -37,8 +39,8 @@ public class UserController {
 
     @GetMapping
     public List<UserResponse> list(
-            @RequestHeader(GatewayUserContext.USER_ID_HEADER) Long userId,
-            @RequestHeader(GatewayUserContext.ROLES_HEADER) String roles) {
+            @RequestHeader(GatewayHeaders.USER_ID_HEADER) Long userId,
+            @RequestHeader(GatewayHeaders.ROLES_HEADER) String roles) {
         GatewayUserContext.requireAdmin(roles);
         return userUseCase.listUsers().stream()
                 .map(UserResponse::from)
@@ -47,8 +49,8 @@ public class UserController {
 
     @GetMapping("/{id}")
     public UserResponse get(
-            @RequestHeader(GatewayUserContext.USER_ID_HEADER) Long userId,
-            @RequestHeader(GatewayUserContext.ROLES_HEADER) String roles,
+            @RequestHeader(GatewayHeaders.USER_ID_HEADER) Long userId,
+            @RequestHeader(GatewayHeaders.ROLES_HEADER) String roles,
             @PathVariable Long id) {
         GatewayUserContext.requireSelfOrAdmin(userId, roles, id);
         return UserResponse.from(userUseCase.getUser(id));
@@ -56,8 +58,8 @@ public class UserController {
 
     @PutMapping("/{id}")
     public UserResponse update(
-            @RequestHeader(GatewayUserContext.USER_ID_HEADER) Long userId,
-            @RequestHeader(GatewayUserContext.ROLES_HEADER) String roles,
+            @RequestHeader(GatewayHeaders.USER_ID_HEADER) Long userId,
+            @RequestHeader(GatewayHeaders.ROLES_HEADER) String roles,
             @PathVariable Long id,
             @Valid @RequestBody UpdateUserRequest request) {
         GatewayUserContext.requireSelfOrAdmin(userId, roles, id);
@@ -67,8 +69,8 @@ public class UserController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(
-            @RequestHeader(GatewayUserContext.USER_ID_HEADER) Long userId,
-            @RequestHeader(GatewayUserContext.ROLES_HEADER) String roles,
+            @RequestHeader(GatewayHeaders.USER_ID_HEADER) Long userId,
+            @RequestHeader(GatewayHeaders.ROLES_HEADER) String roles,
             @PathVariable Long id) {
         GatewayUserContext.requireAdmin(roles);
         userUseCase.deleteUser(id);

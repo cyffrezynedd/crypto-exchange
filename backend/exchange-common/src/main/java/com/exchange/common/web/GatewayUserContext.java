@@ -1,12 +1,9 @@
-package com.exchange.iam.adapter.in.web;
+package com.exchange.common.web;
 
 import com.exchange.common.error.ErrorCode;
 import com.exchange.common.error.ExchangeException;
 
 public final class GatewayUserContext {
-
-    public static final String USER_ID_HEADER = "X-User-Id";
-    public static final String ROLES_HEADER = "X-User-Roles";
 
     private GatewayUserContext() {
     }

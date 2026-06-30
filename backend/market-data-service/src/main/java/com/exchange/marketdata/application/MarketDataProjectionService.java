@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class MarketDataProjectionService {
 
@@ -33,6 +35,12 @@ public class MarketDataProjectionService {
         store.indexOrderOwner(event.orderId(), event.userId(), event.username());
         store.addOrder(symbol, event.side(), event.orderId(), event.price(), event.quantity(), event.username());
         log.debug("Order book updated for {} order {}", symbol, event.orderId());
+    }
+
+    public void onOrderCancelled(String orderId, long tradingPairId) {
+        String symbol = store.resolveSymbol(tradingPairId);
+        store.removeOrder(symbol, UUID.fromString(orderId));
+        log.debug("Order {} removed from book {}", orderId, symbol);
     }
 
     public void onTradeExecuted(TradeExecutedEvent event) throws JsonProcessingException {

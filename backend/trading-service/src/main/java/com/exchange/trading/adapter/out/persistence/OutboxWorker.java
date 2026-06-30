@@ -35,7 +35,8 @@ public class OutboxWorker {
     @SchedulerLock(name = "outboxWorker", lockAtLeastFor = "4s", lockAtMostFor = "30s")
     @Transactional
     public void processOutbox() {
-        List<OutboxEventJpaEntity> events = outboxRepository.findUnprocessed();
+        List<OutboxEventJpaEntity> events = outboxRepository.findUnprocessed(
+                tradingProperties.getOutbox().getMaxRetries());
         int processed = 0;
         for (OutboxEventJpaEntity event : events) {
             if (processed >= tradingProperties.getOutbox().getBatchSize()) {
