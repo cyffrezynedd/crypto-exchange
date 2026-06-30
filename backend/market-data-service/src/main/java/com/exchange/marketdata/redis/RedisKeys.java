@@ -19,4 +19,8 @@ public final class RedisKeys {
     public static String trades(String symbol) {
         return "market:trades:" + symbol;
     }
+
+    public static final String ORDER_OWNERS = "market:orderbook:order-owners";
+
+    public static final String USERNAMES = "market:orderbook:usernames";
 }

@@ -30,7 +30,8 @@ public class MarketDataProjectionService {
 
     public void onOrderCreated(OrderCreatedEvent event) {
         String symbol = store.resolveSymbol(event.tradingPairId());
-        store.addOrder(symbol, event.side(), event.orderId(), event.price(), event.quantity());
+        store.indexOrderOwner(event.orderId(), event.userId(), event.username());
+        store.addOrder(symbol, event.side(), event.orderId(), event.price(), event.quantity(), event.username());
         log.debug("Order book updated for {} order {}", symbol, event.orderId());
     }
 

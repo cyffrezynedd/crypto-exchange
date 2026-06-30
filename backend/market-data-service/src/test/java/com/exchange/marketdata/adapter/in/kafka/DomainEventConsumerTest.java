@@ -38,7 +38,7 @@ class DomainEventConsumerTest {
     void consumesOrderCreatedEvent() throws Exception {
         OrderCreatedEvent payload = new OrderCreatedEvent(
                 UUID.randomUUID(), 1L, 1L, "c1", "SELL", "LIMIT",
-                "50000", "1", "NEW", Instant.parse("2026-06-25T10:00:00Z"));
+                "50000", "1", "NEW", Instant.parse("2026-06-25T10:00:00Z"), null);
         String message = envelope(EventType.ORDER_CREATED, payload);
 
         consumer.consume(message);

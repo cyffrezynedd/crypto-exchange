@@ -1,9 +1,10 @@
 package com.exchange.marketdata.adapter.in.web;
 
+import com.exchange.common.web.PageResponse;
 import com.exchange.marketdata.adapter.in.web.dto.OrderBookLevel;
-import com.exchange.marketdata.adapter.in.web.dto.OrderBookResponse;
 import com.exchange.marketdata.adapter.in.web.dto.TradeResponse;
 import com.exchange.marketdata.adapter.in.web.dto.TradingPairResponse;
+import com.exchange.marketdata.application.OrderBookService;
 import com.exchange.marketdata.redis.RedisMarketDataStore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -11,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -20,10 +22,16 @@ import java.util.List;
 public class PairController {
 
     private final RedisMarketDataStore store;
+    private final OrderBookService orderBookService;
     private final ObjectMapper objectMapper;
 
-    public PairController(RedisMarketDataStore store, ObjectMapper objectMapper) {
+    public PairController(
+            RedisMarketDataStore store,
+            OrderBookService orderBookService,
+            ObjectMapper objectMapper
+    ) {
         this.store = store;
+        this.orderBookService = orderBookService;
         this.objectMapper = objectMapper;
     }
 
@@ -35,14 +43,14 @@ public class PairController {
     }
 
     @GetMapping("/{symbol}/orderbook")
-    public OrderBookResponse getOrderBook(@PathVariable String symbol) {
-        List<OrderBookLevel> bids = store.getBids(symbol).stream()
-                .map(level -> new OrderBookLevel(level.orderId(), level.price(), level.quantity()))
-                .toList();
-        List<OrderBookLevel> asks = store.getAsks(symbol).stream()
-                .map(level -> new OrderBookLevel(level.orderId(), level.price(), level.quantity()))
-                .toList();
-        return new OrderBookResponse(symbol, bids, asks);
+    public PageResponse<OrderBookLevel> getOrderBook(
+            @PathVariable String symbol,
+            @RequestParam(required = false) String side,
+            @RequestParam(required = false) String username,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return orderBookService.getLevels(symbol, side, username, page, size);
     }
 
     @GetMapping("/{symbol}/trades")

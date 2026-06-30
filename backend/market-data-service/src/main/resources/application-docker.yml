@@ -5,6 +5,10 @@ spring:
       discovery:
         enabled: true
         register: true
+  datasource:
+    url: jdbc:postgresql://postgres:5432/crypto_exchange
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
   data:
     redis:
       host: redis

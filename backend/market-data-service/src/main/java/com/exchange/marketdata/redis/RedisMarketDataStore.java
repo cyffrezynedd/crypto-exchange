@@ -61,11 +61,33 @@ public class RedisMarketDataStore {
         return pairs.stream().sorted().toList();
     }
 
-    public void addOrder(String symbol, String side, UUID orderId, String price, String quantity) {
+    public void addOrder(String symbol, String side, UUID orderId, String price, String quantity, String username) {
         redis.opsForSet().add(RedisKeys.PAIRS, symbol);
         String key = sideKey(symbol, side);
         double score = toScore(price);
-        redis.opsForZSet().add(key, member(orderId, quantity), score);
+        String resolvedUsername = resolveUsername(orderId.toString(), username == null ? "" : username);
+        redis.opsForZSet().add(key, member(orderId, quantity, resolvedUsername), score);
+    }
+
+    public void indexOrderOwner(UUID orderId, Long userId, String username) {
+        if (orderId == null || userId == null) {
+            return;
+        }
+        redis.opsForHash().put(RedisKeys.ORDER_OWNERS, orderId.toString(), userId.toString());
+        if (username != null && !username.isBlank()) {
+            redis.opsForHash().put(RedisKeys.USERNAMES, userId.toString(), username);
+        }
+    }
+
+    public void refreshOrderBookUsernames(String symbol) {
+        refreshSideUsernames(RedisKeys.bids(symbol));
+        refreshSideUsernames(RedisKeys.asks(symbol));
+    }
+
+    public void refreshAllOrderBookUsernames() {
+        for (String symbol : listPairs()) {
+            refreshOrderBookUsernames(symbol);
+        }
     }
 
     public void recordTrade(
@@ -125,14 +147,22 @@ public class RedisMarketDataStore {
         }
         for (ZSetOperations.TypedTuple<String> entry : entries) {
             String member = entry.getValue();
-            if (member == null || !member.startsWith(orderId + ":")) {
+            if (member == null) {
                 continue;
             }
-            String remainingQty = member.substring(orderId.toString().length() + 1);
-            BigDecimal remaining = new BigDecimal(remainingQty).subtract(fillQuantity);
+            ParsedMember parsed = parseMember(member);
+            if (parsed == null || !orderId.toString().equals(parsed.orderId())) {
+                continue;
+            }
+            BigDecimal remaining = new BigDecimal(parsed.quantity()).subtract(fillQuantity);
             redis.opsForZSet().remove(key, member);
             if (remaining.compareTo(BigDecimal.ZERO) > 0) {
-                redis.opsForZSet().add(key, member(orderId, remaining.toPlainString()), entry.getScore());
+                String username = resolveUsername(parsed.orderId(), parsed.username());
+                redis.opsForZSet().add(
+                        key,
+                        member(UUID.fromString(parsed.orderId()), remaining.toPlainString(), username),
+                        entry.getScore()
+                );
             }
             return;
         }
@@ -151,25 +181,92 @@ public class RedisMarketDataStore {
             if (member == null || entry.getScore() == null) {
                 continue;
             }
-            int separator = member.indexOf(':');
-            if (separator < 0) {
+            ParsedMember parsed = parseMember(member);
+            if (parsed == null) {
                 continue;
             }
             levels.add(new OrderBookEntry(
-                    member.substring(0, separator),
+                    parsed.orderId(),
                     formatPrice(entry.getScore()),
-                    member.substring(separator + 1)
+                    parsed.quantity(),
+                    resolveUsername(parsed.orderId(), parsed.username())
             ));
         }
         return Collections.unmodifiableList(levels);
+    }
+
+    private void refreshSideUsernames(String key) {
+        Set<ZSetOperations.TypedTuple<String>> entries = redis.opsForZSet().rangeWithScores(key, 0, -1);
+        if (entries == null || entries.isEmpty()) {
+            return;
+        }
+        for (ZSetOperations.TypedTuple<String> entry : entries) {
+            String rawMember = entry.getValue();
+            if (rawMember == null || entry.getScore() == null) {
+                continue;
+            }
+            ParsedMember parsed = parseMember(rawMember);
+            if (parsed == null) {
+                continue;
+            }
+            String resolved = resolveUsername(parsed.orderId(), parsed.username());
+            if (resolved.equals(parsed.username())) {
+                continue;
+            }
+            redis.opsForZSet().remove(key, rawMember);
+            redis.opsForZSet().add(
+                    key,
+                    member(UUID.fromString(parsed.orderId()), parsed.quantity(), resolved),
+                    entry.getScore()
+            );
+        }
+    }
+
+    private String resolveUsername(String orderId, String storedUsername) {
+        if (storedUsername != null && !storedUsername.isBlank()) {
+            return storedUsername;
+        }
+        Object owner = redis.opsForHash().get(RedisKeys.ORDER_OWNERS, orderId);
+        if (owner == null) {
+            return "";
+        }
+        Object username = redis.opsForHash().get(RedisKeys.USERNAMES, owner.toString());
+        return username == null ? "" : username.toString();
     }
 
     private static String sideKey(String symbol, String side) {
         return "BUY".equalsIgnoreCase(side) ? RedisKeys.bids(symbol) : RedisKeys.asks(symbol);
     }
 
-    private static String member(UUID orderId, String quantity) {
-        return orderId + ":" + quantity;
+    private static String member(UUID orderId, String quantity, String username) {
+        String safeUsername = username == null ? "" : username;
+        return orderId + "|" + quantity + "|" + safeUsername;
+    }
+
+    private static ParsedMember parseMember(String member) {
+        int first = member.indexOf('|');
+        if (first > 0) {
+            int second = member.indexOf('|', first + 1);
+            if (second > first) {
+                return new ParsedMember(
+                        member.substring(0, first),
+                        member.substring(first + 1, second),
+                        member.substring(second + 1)
+                );
+            }
+        }
+        int separator = member.indexOf(':');
+        if (separator > 0) {
+            return new ParsedMember(
+                    member.substring(0, separator),
+                    member.substring(separator + 1),
+                    ""
+            );
+        }
+        return null;
+    }
+
+    private record ParsedMember(String orderId, String quantity, String username) {
     }
 
     private static double toScore(String price) {
@@ -180,6 +277,6 @@ public class RedisMarketDataStore {
         return BigDecimal.valueOf(score).stripTrailingZeros().toPlainString();
     }
 
-    public record OrderBookEntry(String orderId, String price, String quantity) {
+    public record OrderBookEntry(String orderId, String price, String quantity, String username) {
     }
 }

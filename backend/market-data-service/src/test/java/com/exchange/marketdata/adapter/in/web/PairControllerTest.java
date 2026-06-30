@@ -1,7 +1,9 @@
 package com.exchange.marketdata.adapter.in.web;
 
-import com.exchange.marketdata.adapter.in.web.dto.OrderBookResponse;
+import com.exchange.common.web.PageResponse;
+import com.exchange.marketdata.adapter.in.web.dto.OrderBookLevel;
 import com.exchange.marketdata.adapter.in.web.dto.TradingPairResponse;
+import com.exchange.marketdata.application.OrderBookService;
 import com.exchange.marketdata.redis.RedisMarketDataStore;
 import com.exchange.common.json.ExchangeObjectMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,12 +24,15 @@ class PairControllerTest {
     @Mock
     private RedisMarketDataStore store;
 
+    @Mock
+    private OrderBookService orderBookService;
+
     private PairController controller;
 
     @BeforeEach
     void setUp() {
         ObjectMapper objectMapper = ExchangeObjectMapper.create();
-        controller = new PairController(store, objectMapper);
+        controller = new PairController(store, orderBookService, objectMapper);
     }
 
     @Test
@@ -41,17 +46,19 @@ class PairControllerTest {
     }
 
     @Test
-    void getOrderBookMapsBidsAndAsks() {
-        when(store.getBids("BTC_USDT")).thenReturn(List.of(
-                new RedisMarketDataStore.OrderBookEntry("o1", "59000", "0.5")));
-        when(store.getAsks("BTC_USDT")).thenReturn(List.of(
-                new RedisMarketDataStore.OrderBookEntry("o2", "60000", "1")));
+    void getOrderBookReturnsPagedLevels() {
+        PageResponse<OrderBookLevel> page = new PageResponse<>(
+                List.of(new OrderBookLevel("o1", "59000", "0.5", "SELL", "alice")),
+                0,
+                10,
+                1,
+                1
+        );
+        when(orderBookService.getLevels("BTC_USDT", null, null, 0, 10)).thenReturn(page);
 
-        OrderBookResponse book = controller.getOrderBook("BTC_USDT");
+        PageResponse<OrderBookLevel> book = controller.getOrderBook("BTC_USDT", null, null, 0, 10);
 
-        assertEquals("BTC_USDT", book.symbol());
-        assertEquals(1, book.bids().size());
-        assertEquals("59000", book.bids().getFirst().price());
-        assertEquals(1, book.asks().size());
+        assertEquals(1, book.content().size());
+        assertEquals("alice", book.content().getFirst().username());
     }
 }

@@ -43,12 +43,13 @@ class MarketDataProjectionServiceTest {
         UUID orderId = UUID.randomUUID();
         OrderCreatedEvent event = new OrderCreatedEvent(
                 orderId, 10L, 1L, "c1", "BUY", "LIMIT",
-                "60000", "0.5", "NEW", Instant.parse("2026-06-25T12:00:00Z"));
+                "60000", "0.5", "NEW", Instant.parse("2026-06-25T12:00:00Z"), "trader");
         when(store.resolveSymbol(1L)).thenReturn("BTC_USDT");
 
         service.onOrderCreated(event);
 
-        verify(store).addOrder("BTC_USDT", "BUY", orderId, "60000", "0.5");
+        verify(store).addOrder("BTC_USDT", "BUY", orderId, "60000", "0.5", "trader");
+        verify(store).indexOrderOwner(orderId, 10L, "trader");
     }
 
     @Test
