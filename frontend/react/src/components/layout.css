@@ -1,0 +1,230 @@
+.shell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  background: var(--q-grey);
+  color: var(--q-base);
+  overflow: hidden;
+}
+
+.shell::before {
+  content: '';
+  position: fixed;
+  inset: -10%;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 55% at 18% 22%, rgba(121, 62, 237, 0.32), transparent 58%),
+    radial-gradient(ellipse 55% 45% at 82% 68%, rgba(134, 59, 255, 0.18), transparent 52%),
+    radial-gradient(ellipse 40% 35% at 50% 100%, rgba(121, 62, 237, 0.12), transparent 50%);
+  animation: shell-glow 20s ease-in-out infinite alternate;
+}
+
+@keyframes shell-glow {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate(2%, -1.5%) scale(1.04);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-1.5%, 2%) scale(1.02);
+    opacity: 0.92;
+  }
+}
+
+.app-body {
+  position: relative;
+  z-index: 1;
+}
+
+.app-body {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  padding-top: var(--shell-body-gap);
+}
+
+.sidebar {
+  display: none;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 6px 4px;
+  border-radius: 10px;
+  color: var(--q-base);
+  text-decoration: none;
+  font-family: var(--font-stapel);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  border: none;
+  outline: 0;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-link.active {
+  background: transparent;
+}
+
+.nav-link__icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: var(--q-ghost);
+  color: var(--q-grey-fading);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.nav-link__icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.nav-link.active .nav-link__icon {
+  background: #474747;
+  color: var(--q-base);
+}
+
+.nav-link__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-page {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  padding: 10px var(--shell-inset-x) 24px;
+}
+
+.app-page > div {
+  height: 100%;
+  min-height: 0;
+}
+
+@media (min-width: 1280px) {
+  .app-body {
+    flex-direction: row;
+    gap: 40px;
+    padding-right: var(--shell-body-pr);
+    padding-left: var(--shell-body-pl);
+  }
+
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: var(--shell-sidebar-left);
+    top: var(--shell-sidebar-top);
+    width: var(--shell-sidebar-w);
+    height: calc(100dvh - var(--shell-sidebar-top));
+    padding: 0 0 24px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    z-index: 10;
+    background: transparent;
+  }
+
+  .app-page {
+    flex-grow: 1;
+    padding: 0 0 16px var(--shell-content-pl);
+  }
+
+  .nav {
+    gap: 8px;
+  }
+
+  .nav-link {
+    height: 40px;
+    padding: 8px 6px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .app-body {
+    gap: 64px;
+  }
+
+  .sidebar {
+    padding-bottom: 32px;
+  }
+
+  .nav {
+    gap: 12px;
+  }
+
+  .nav-link {
+    height: 58px;
+    gap: 10px;
+    padding: 8px 4px;
+    border-radius: 16px;
+    font-size: 20px;
+  }
+
+  .nav-link__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+  }
+
+  .nav-link__icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .app-page {
+    padding-bottom: 32px;
+  }
+}
+
+.scroll-hidden {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+}
+
+.scroll-hidden::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scroll-hidden::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+}
