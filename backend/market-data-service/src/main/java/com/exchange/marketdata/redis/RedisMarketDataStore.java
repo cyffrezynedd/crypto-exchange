@@ -90,6 +90,12 @@ public class RedisMarketDataStore {
         }
     }
 
+    public void removeOrder(String symbol, UUID orderId) {
+        removeFromSide(RedisKeys.bids(symbol), orderId);
+        removeFromSide(RedisKeys.asks(symbol), orderId);
+        redis.opsForHash().delete(RedisKeys.ORDER_OWNERS, orderId.toString());
+    }
+
     public void recordTrade(
             String symbol,
             UUID tradeId,
@@ -138,6 +144,24 @@ public class RedisMarketDataStore {
         BigDecimal fill = new BigDecimal(fillQuantity);
         updateSide(symbol, RedisKeys.bids(symbol), orderId, fill);
         updateSide(symbol, RedisKeys.asks(symbol), orderId, fill);
+    }
+
+    private void removeFromSide(String key, UUID orderId) {
+        Set<ZSetOperations.TypedTuple<String>> entries = redis.opsForZSet().rangeWithScores(key, 0, -1);
+        if (entries == null) {
+            return;
+        }
+        for (ZSetOperations.TypedTuple<String> entry : entries) {
+            String member = entry.getValue();
+            if (member == null) {
+                continue;
+            }
+            ParsedMember parsed = parseMember(member);
+            if (parsed != null && orderId.toString().equals(parsed.orderId())) {
+                redis.opsForZSet().remove(key, member);
+                return;
+            }
+        }
     }
 
     private void updateSide(String symbol, String key, UUID orderId, BigDecimal fillQuantity) {
