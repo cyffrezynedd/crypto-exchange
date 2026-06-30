@@ -1,0 +1,45 @@
+.ui-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: 12px;
+  font-family: var(--font-manrope, 'Manrope', sans-serif);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.ui-alert--danger {
+  background: #442020;
+  color: var(--q-base);
+}
+
+.ui-alert--success {
+  background: #1a3d2e;
+  color: var(--q-base);
+}
+
+.ui-alert--warning {
+  background: #3d3420;
+  color: var(--q-base);
+}
+
+.ui-alert__icon {
+  flex-shrink: 0;
+  color: var(--q-error);
+  margin-top: 0.1rem;
+}
+
+.ui-alert__text {
+  min-width: 0;
+  word-break: break-word;
+}
+
+@media (min-width: 1280px) {
+  .ui-alert {
+    gap: 1rem;
+    padding: 0.85rem 1.25rem;
+    border-radius: 16px;
+    font-size: 15px;
+  }
+}

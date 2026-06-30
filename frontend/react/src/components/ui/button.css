@@ -1,0 +1,83 @@
+.q-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--control-h);
+  padding: 0 var(--control-px);
+  font-size: var(--control-fs);
+  border-radius: var(--control-radius);
+  gap: var(--control-gap);
+  font-family: var(--font-stapel);
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease, opacity 0.2s ease;
+  outline: none;
+  width: auto;
+}
+
+.q-btn:focus-visible {
+  outline: 2px solid rgba(121, 62, 237, 0.45);
+  outline-offset: 2px;
+}
+
+.q-btn-block {
+  width: 100%;
+}
+
+.q-btn-primary {
+  background: var(--q-primary);
+  color: var(--q-base);
+}
+
+.q-btn-primary:hover:not(:disabled) {
+  background: var(--q-primary-hover);
+  transform: none;
+}
+
+.q-btn-primary:active:not(:disabled) {
+  background: var(--q-primary-active);
+}
+
+.q-btn-ghost {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--q-base);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.q-btn-ghost:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  transform: none;
+}
+
+.q-btn-ghost.danger {
+  color: #ff6b6b;
+  border-color: rgba(219, 42, 39, 0.35);
+}
+
+.q-btn-ghost.danger:hover:not(:disabled) {
+  background: rgba(219, 42, 39, 0.12);
+  transform: none;
+}
+
+.q-btn-stroke {
+  background: transparent;
+  color: var(--q-base);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.q-btn-stroke:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.04);
+  transform: none;
+}
+
+.q-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  background: var(--q-grey-disabled);
+  color: var(--q-grey-fading);
+}
+
+.q-btn-primary:disabled {
+  background: var(--q-grey-disabled);
+}

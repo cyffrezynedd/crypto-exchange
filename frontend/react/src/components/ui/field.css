@@ -1,0 +1,185 @@
+.field-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 100%;
+}
+
+.field-shell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: var(--control-h);
+  padding: 0 var(--control-px) 0 calc(var(--control-px) * 0.75);
+  border-radius: var(--control-radius);
+  background: var(--surface-soft);
+  transition: background 0.2s ease;
+  cursor: text;
+}
+
+.field-shell--plain {
+  background: var(--surface-soft);
+}
+
+.field-shell--sidebar {
+  background: var(--q-grey-disabled);
+  min-height: 56px;
+  height: 56px;
+  padding: 0 16px 0 12px;
+  border-radius: var(--q-radius-16);
+}
+
+.field-shell--sidebar:hover:not(.is-error):not(.is-focused):not(:focus-within) {
+  background: var(--q-grey-hover);
+}
+
+.field-shell--sidebar.is-focused,
+.field-shell--sidebar:focus-within {
+  background: var(--q-grey-disabled);
+}
+
+.field-shell--sidebar .field-label {
+  left: 12px;
+  font-size: 14px;
+  line-height: 14px;
+  letter-spacing: -0.02em;
+}
+
+.field-shell--sidebar .field-label.is-floated {
+  top: 12px;
+  font-size: 11px;
+  line-height: 11px;
+  color: var(--q-secondary);
+}
+
+.field-shell--sidebar:has(.field-label.is-floated) .field-input-row {
+  margin-top: 17px;
+}
+
+.field-shell--sidebar .field-input {
+  font-size: 14px;
+  line-height: 14px;
+  letter-spacing: -0.02em;
+}
+
+@media (min-width: 1280px) {
+  .field-shell--sidebar {
+    height: 54px;
+    min-height: 54px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .field-shell--sidebar {
+    height: 70px;
+    min-height: 70px;
+    padding-right: 24px;
+    border-radius: var(--q-radius-20);
+  }
+
+  .field-shell--sidebar .field-label.is-floated {
+    top: 15px;
+    font-size: 14px;
+    line-height: 14px;
+  }
+
+  .field-shell--sidebar:has(.field-label.is-floated) .field-input-row {
+    margin-top: 22px;
+  }
+
+  .field-shell--sidebar .field-label,
+  .field-shell--sidebar .field-input {
+    font-size: 18px;
+    line-height: 18px;
+  }
+}
+
+.field-shell.is-password {
+  padding-right: calc(var(--control-px) * 2);
+}
+
+.field-shell:hover:not(.is-error):not(.is-focused):not(:focus-within):not(.field-shell--sidebar) {
+  background: var(--surface-soft-hover);
+}
+
+.field-shell.is-focused:not(.field-shell--sidebar),
+.field-shell:focus-within:not(.field-shell--sidebar) {
+  background: var(--surface-soft-hover);
+}
+
+.field-shell.is-error {
+  background: #442020;
+}
+
+.field-label {
+  position: absolute;
+  left: calc(var(--control-px) * 0.75);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--q-secondary);
+  font-family: var(--font-stapel);
+  font-size: var(--control-fs);
+  font-weight: 500;
+  line-height: 1.15;
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+.field-label.is-floated {
+  top: 0.35rem;
+  transform: none;
+  font-size: max(10px, calc(var(--control-fs) * 0.78));
+  line-height: 1.1;
+  color: var(--q-grey-fading);
+}
+
+.field-input-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.field-shell:has(.field-label.is-floated) .field-input-row {
+  margin-top: calc(var(--control-h) * 0.42);
+}
+
+.field-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: var(--q-base);
+  font-family: var(--font-stapel);
+  font-size: var(--control-fs);
+  font-weight: 500;
+  line-height: 1.15;
+  outline: none;
+  padding: 0;
+}
+
+.field-eye {
+  position: absolute;
+  right: calc(var(--control-px) * 0.75);
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--q-grey-fading);
+  padding: 0;
+  min-width: auto;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.field-eye:hover {
+  transform: translateY(-50%);
+  color: var(--q-base);
+}
+
+.field-error {
+  margin: 0;
+  font-family: var(--font-manrope);
+  font-size: 12px;
+  color: var(--q-error);
+}
