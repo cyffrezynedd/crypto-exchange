@@ -16,6 +16,10 @@ class TradingPairJpaEntity {
     @Column(nullable = false, length = 32)
     private String symbol;
 
+    String getSymbol() {
+        return symbol;
+    }
+
     @Column(name = "base_currency_id", nullable = false)
     private Long baseCurrencyId;
 
