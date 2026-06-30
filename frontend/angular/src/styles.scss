@@ -1,0 +1,162 @@
+@import '../../react/src/styles/auth.css';
+@import '../../react/src/styles/tokens.css';
+@import '../../react/src/styles/fonts.css';
+@import '../../react/src/styles/tables.css';
+@import '../../react/src/styles/page-shell.css';
+@import '../../react/src/styles/market.css';
+@import '../../react/src/styles/forms.css';
+@import '../../react/src/components/layout.css';
+@import '../../react/src/components/header.css';
+@import '../../react/src/components/pagination.css';
+@import '../../react/src/components/ui/button.css';
+@import '../../react/src/components/ui/select.css';
+@import '../../react/src/components/ui/field.css';
+@import '../../react/src/components/ui/empty.css';
+@import '../../react/src/components/ui/alert.css';
+@import '../../react/src/components/ui/side-panel.css';
+@import '../../react/src/components/ui/side-panel-field.css';
+@import '../../react/src/components/ui/search-input.css';
+@import '../../react/src/components/ui/toast.css';
+@import '../../react/src/styles/motion.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  overflow: hidden;
+}
+
+html,
+body,
+app-root {
+  height: 100%;
+}
+
+app-root {
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+}
+
+app-root > router-outlet {
+  display: none;
+}
+
+app-root > :not(router-outlet) {
+  grid-area: 1 / 1;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+app-login,
+app-register {
+  display: contents;
+}
+
+app-auth-shell.auth-page {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+app-shell {
+  display: block;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.app-page > :not(router-outlet) {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.app-page > :not(router-outlet) .page-shell {
+  flex: 1;
+  min-height: 0;
+}
+
+a.nav-link,
+a.nav-link:hover,
+a.nav-link:visited,
+a.nav-link.active {
+  color: var(--q-base);
+  text-decoration: none;
+}
+
+app-auth-card {
+  display: block;
+  width: 100%;
+}
+
+
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: Manrope, Inter, system-ui, sans-serif;
+  background: var(--q-grey);
+  color: var(--q-base);
+}
+
+.filters-bar .ui-select {
+  position: relative;
+}
+
+.ui-empty__actions .q-btn + .q-btn {
+  margin-left: 0;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+.ui-select__trigger,
+.ui-select__option,
+.side-panel__close,
+.field-eye {
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.side-panel-host {
+  display: contents;
+}
+
+.side-panel-field-host {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.side-panel__panel .side-panel__body,
+.side-panel__panel .side-panel__footer,
+.side-panel__panel .side-panel-form {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.side-panel__actions .q-btn.q-btn-block {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
