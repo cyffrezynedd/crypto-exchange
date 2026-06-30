@@ -15,7 +15,7 @@ BACKEND_DIR := backend
 IAM_DIR := backend/iam-service
 GATEWAY_DIR := backend/api-gateway
 
-.PHONY: help db-up infra-up db-down db-reset db-wait migrate psql smoke smoke-api build run-iam run-gateway up down
+.PHONY: help db-up infra-up db-down db-reset db-wait migrate psql smoke smoke-api build run-iam run-gateway up down run-react run-angular
 
 help:
 	@echo ""
@@ -29,6 +29,8 @@ help:
 	@echo   make down        - stop all containers
 	@echo   make smoke       - quick db check
 	@echo   make smoke-api   - HTTP smoke test via gateway (services must be running)
+	@echo   make run-react   - npm run dev (frontend/react, gateway must be up)
+	@echo   make run-angular - ng serve (frontend/angular, gateway must be up)
 	@echo ""
 
 db-up:
@@ -79,3 +81,9 @@ up: build
 
 down:
 	docker compose down
+
+run-react:
+	cd frontend/react && npm run dev
+
+run-angular:
+	cd frontend/angular && npm start
