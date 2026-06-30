@@ -12,7 +12,9 @@ import com.exchange.trading.domain.model.OrderSide;
 import com.exchange.trading.domain.model.OrderStatus;
 import com.exchange.trading.domain.model.OrderType;
 import com.exchange.trading.domain.model.TradingPair;
+import com.exchange.common.web.PageResponse;
 import com.exchange.trading.port.in.CancelOrderCommand;
+import com.exchange.trading.port.in.OrderSearchQuery;
 import com.exchange.trading.port.in.OrderUseCase;
 import com.exchange.trading.port.in.PlaceOrderCommand;
 import com.exchange.trading.port.out.ClearingPort;
@@ -87,7 +89,7 @@ public class OrderService implements OrderUseCase {
             throw ex;
         }
 
-        outboxPort.saveOrderCreated(saved);
+        outboxPort.saveOrderCreated(saved, command.username());
 
         List<MatchResult> matches = matchingEngine.submitOrder(saved);
         tradeExecutionService.executeMatches(matches);
@@ -140,6 +142,21 @@ public class OrderService implements OrderUseCase {
     @Transactional(readOnly = true)
     public List<Order> listOrders(Long userId) {
         return orderRepository.findByUserId(userId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PageResponse<Order> searchOrders(OrderSearchQuery query) {
+        int page = Math.max(query.page(), 0);
+        int size = Math.min(Math.max(query.size(), 1), 100);
+        return orderRepository.search(
+                query.userId(),
+                query.side(),
+                query.status(),
+                query.tradingPairId(),
+                page,
+                size
+        );
     }
 
     private void validatePlaceOrder(PlaceOrderCommand command) {

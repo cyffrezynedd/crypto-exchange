@@ -26,7 +26,7 @@ class OutboxPersistenceAdapter implements OutboxPort {
     }
 
     @Override
-    public void saveOrderCreated(Order order) {
+    public void saveOrderCreated(Order order, String username) {
         OrderCreatedEvent payload = new OrderCreatedEvent(
                 order.getId(),
                 order.getUserId(),
@@ -37,7 +37,8 @@ class OutboxPersistenceAdapter implements OutboxPort {
                 decimalToString(order.getPrice()),
                 order.getQuantity().toPlainString(),
                 order.getStatus().name(),
-                order.getCreatedAt()
+                order.getCreatedAt(),
+                username
         );
         saveEvent(
                 AggregateType.ORDER,

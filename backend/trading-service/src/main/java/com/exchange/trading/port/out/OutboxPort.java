@@ -5,7 +5,7 @@ import com.exchange.trading.domain.model.Trade;
 
 public interface OutboxPort {
 
-    void saveOrderCreated(Order order);
+    void saveOrderCreated(Order order, String username);
 
     void saveOrderCancelled(Order order);
 

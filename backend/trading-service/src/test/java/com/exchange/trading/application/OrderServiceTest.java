@@ -88,12 +88,12 @@ class OrderServiceTest {
         });
 
         PlaceOrderCommand command = new PlaceOrderCommand(
-                5L, 1L, "c1", OrderSide.BUY, OrderType.LIMIT, new BigDecimal("100"), new BigDecimal("2"));
+                5L, 1L, "c1", OrderSide.BUY, OrderType.LIMIT, new BigDecimal("100"), new BigDecimal("2"), "trader");
 
         Order placed = orderService.placeOrder(command);
 
         verify(clearingPort).freezeFunds(any(UUID.class), eq(5L), eq(20L), eq(new BigDecimal("200")));
-        verify(outboxPort).saveOrderCreated(any(Order.class));
+        verify(outboxPort).saveOrderCreated(any(Order.class), eq("trader"));
         assertEquals(OrderStatus.NEW, placed.getStatus());
     }
 
@@ -105,7 +105,7 @@ class OrderServiceTest {
 
         ExchangeException ex = assertThrows(ExchangeException.class, () -> orderService.placeOrder(
                 new PlaceOrderCommand(1L, 2L, null, OrderSide.BUY, OrderType.LIMIT,
-                        new BigDecimal("10"), new BigDecimal("1"))));
+                        new BigDecimal("10"), new BigDecimal("1"), null)));
         assertEquals(ErrorCode.BUSINESS_RULE_VIOLATED, ex.code());
     }
 
@@ -117,7 +117,7 @@ class OrderServiceTest {
 
         assertThrows(DuplicateClientOrderException.class, () -> orderService.placeOrder(
                 new PlaceOrderCommand(3L, 1L, "dup", OrderSide.SELL, OrderType.LIMIT,
-                        new BigDecimal("50"), new BigDecimal("1"))));
+                        new BigDecimal("50"), new BigDecimal("1"), null)));
         verify(clearingPort, never()).freezeFunds(any(), any(), any(), any());
     }
 
@@ -166,7 +166,7 @@ class OrderServiceTest {
 
         assertThrows(TradingPairNotFoundException.class, () -> orderService.placeOrder(
                 new PlaceOrderCommand(1L, 404L, null, OrderSide.BUY, OrderType.LIMIT,
-                        new BigDecimal("1"), new BigDecimal("1"))));
+                        new BigDecimal("1"), new BigDecimal("1"), null)));
     }
 
     private static TradingPair activePair(long id, long baseCurrencyId, long quoteCurrencyId) {

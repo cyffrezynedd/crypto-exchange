@@ -15,6 +15,7 @@ public record PlaceOrderCommand(
         OrderSide side,
         OrderType type,
         BigDecimal price,
-        BigDecimal quantity
+        BigDecimal quantity,
+        String username
 ) {
 }

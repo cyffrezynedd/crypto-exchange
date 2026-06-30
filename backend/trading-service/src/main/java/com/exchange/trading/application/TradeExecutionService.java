@@ -50,8 +50,6 @@ public class TradeExecutionService {
                     ? match.takerOrder()
                     : match.makerOrder();
 
-            buyOrder.applyFill(match.quantity());
-            sellOrder.applyFill(match.quantity());
             buyOrder.setUpdatedAt(Instant.now());
             sellOrder.setUpdatedAt(Instant.now());
 

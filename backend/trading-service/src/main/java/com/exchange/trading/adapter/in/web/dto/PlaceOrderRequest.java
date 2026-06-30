@@ -19,7 +19,7 @@ public record PlaceOrderRequest(
         @DecimalMin(value = "0.0", inclusive = false) BigDecimal price,
         @NotNull @DecimalMin(value = "0.0", inclusive = false) BigDecimal quantity
 ) {
-    public com.exchange.trading.port.in.PlaceOrderCommand toCommand(Long userId) {
+    public com.exchange.trading.port.in.PlaceOrderCommand toCommand(Long userId, String username) {
         return new com.exchange.trading.port.in.PlaceOrderCommand(
                 userId,
                 tradingPairId,
@@ -27,7 +27,8 @@ public record PlaceOrderRequest(
                 side,
                 type,
                 price,
-                quantity
+                quantity,
+                username
         );
     }
 }

@@ -64,7 +64,10 @@ class TradeExecutionServiceTest {
 
         Order buy = limitOrder(OrderSide.BUY, 1L);
         Order sell = limitOrder(OrderSide.SELL, 2L);
-        MatchResult match = new MatchResult(buy, sell, new BigDecimal("50000"), new BigDecimal("0.5"));
+        BigDecimal fillQty = new BigDecimal("0.5");
+        buy.applyFill(fillQty);
+        sell.applyFill(fillQty);
+        MatchResult match = new MatchResult(buy, sell, new BigDecimal("50000"), fillQty);
 
         when(tradingPairRepository.findById(1L)).thenReturn(Optional.of(pair));
         when(tradeRepository.save(any(Trade.class))).thenAnswer(invocation -> invocation.getArgument(0));

@@ -1,5 +1,6 @@
 package com.exchange.trading.port.in;
 
+import com.exchange.common.web.PageResponse;
 import com.exchange.trading.domain.model.Order;
 
 import java.util.List;
@@ -14,4 +15,6 @@ public interface OrderUseCase {
     Order getOrder(Long userId, UUID orderId);
 
     List<Order> listOrders(Long userId);
+
+    PageResponse<Order> searchOrders(OrderSearchQuery query);
 }
