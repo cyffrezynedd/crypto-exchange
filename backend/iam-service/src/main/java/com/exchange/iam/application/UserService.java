@@ -36,10 +36,10 @@ public class UserService implements UserUseCase {
     @Override
     public User createUser(CreateUserCommand command) {
         if (userRepository.existsByEmail(command.email())) {
-            throw new DuplicateUserException("Email already exists: " + command.email());
+            throw new DuplicateUserException("Этот email уже зарегистрирован");
         }
         if (userRepository.existsByUsername(command.username())) {
-            throw new DuplicateUserException("Username already exists: " + command.username());
+            throw new DuplicateUserException("Этот никнейм уже занят");
         }
 
         User user = new User();
@@ -72,10 +72,10 @@ public class UserService implements UserUseCase {
                 .orElseThrow(() -> new UserNotFoundException(command.id()));
 
         if (userRepository.existsByEmailAndIdNot(command.email(), command.id())) {
-            throw new DuplicateUserException("Email already exists: " + command.email());
+            throw new DuplicateUserException("Этот email уже зарегистрирован");
         }
         if (userRepository.existsByUsernameAndIdNot(command.username(), command.id())) {
-            throw new DuplicateUserException("Username already exists: " + command.username());
+            throw new DuplicateUserException("Этот никнейм уже занят");
         }
 
         user.setEmail(command.email());
