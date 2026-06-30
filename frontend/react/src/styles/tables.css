@@ -1,0 +1,337 @@
+.filters-row label,
+.inline-add label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-family: var(--font-stapel);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--q-secondary);
+}
+
+.filters-row input,
+.inline-add input,
+.stack-form input {
+  border: none;
+  background: var(--surface-soft);
+  color: var(--q-base);
+  height: var(--control-h);
+  padding: 0 var(--control-px);
+  font-size: var(--control-fs);
+  border-radius: var(--control-radius);
+  font-family: var(--font-stapel);
+  font-weight: 500;
+  transition: background 0.2s ease;
+}
+
+.filters-row .ui-select,
+.inline-add .ui-select,
+.stack-form .ui-select {
+  width: 100%;
+}
+
+.filters-row input:hover,
+.inline-add input:hover,
+.stack-form input:hover {
+  background: var(--surface-soft-hover);
+}
+
+.filters-row input:focus,
+.inline-add input:focus,
+.stack-form input:focus {
+  outline: none;
+  background: var(--surface-soft-hover);
+}
+
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.table-wrap::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-manrope);
+  font-size: 0.92rem;
+}
+
+.data-table th,
+.data-table td {
+  text-align: left;
+  padding: 0.75rem 0.65rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.data-table th {
+  color: var(--muted);
+  font-family: var(--font-stapel);
+  font-weight: 500;
+  font-size: 0.82rem;
+}
+
+.data-table th.data-table__col-action,
+.data-table td.data-table__col-action {
+  width: 1%;
+  white-space: nowrap;
+  text-align: right;
+  vertical-align: middle;
+}
+
+.data-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.empty-cell {
+  text-align: center;
+  color: var(--muted);
+  padding: 2rem 1rem !important;
+}
+
+.filters-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.filters-row {
+  display: grid;
+  gap: 0.75rem;
+  align-items: end;
+}
+
+.inline-add {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: end;
+}
+
+@media (min-width: 768px) {
+  .filters-row {
+    grid-template-columns: repeat(2, minmax(140px, 1fr)) auto auto;
+  }
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.tab {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--muted);
+  height: var(--control-h);
+  padding: 0 var(--control-px);
+  font-family: var(--font-stapel);
+  font-size: var(--control-fs);
+  font-weight: 500;
+  border-radius: var(--control-radius);
+}
+
+.tab.active {
+  background: var(--accent-soft);
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.tab.buy.active {
+  background: rgba(52, 211, 153, 0.15);
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.tab.sell.active {
+  background: rgba(248, 113, 113, 0.15);
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.buy {
+  color: var(--success);
+  font-weight: 600;
+}
+
+.sell {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.status-pill {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 0.78rem;
+}
+
+.orderbook {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .orderbook {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.asks-title {
+  color: var(--danger);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.bids-title {
+  color: var(--success);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.wallet-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 1280px) {
+  .wallet-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+
+.wallet-card {
+  border-radius: 12px;
+  padding: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.wallet-code {
+  color: var(--muted);
+  font-family: var(--font-stapel);
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.wallet-card strong {
+  font-family: var(--font-stapel);
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--q-base);
+}
+
+.wallet-card small {
+  font-family: var(--font-manrope);
+  font-size: 0.8rem;
+  color: var(--q-secondary);
+}
+
+.card-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 1280px) {
+  .card-head {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.stack-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.stack-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-family: var(--font-stapel);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--q-secondary);
+}
+
+.stack-form input {
+  border: none;
+  background: var(--surface-soft);
+  color: var(--q-base);
+  height: var(--control-h);
+  padding: 0 var(--control-px);
+  font-size: var(--control-fs);
+  border-radius: var(--control-radius);
+  font-family: var(--font-stapel);
+  font-weight: 500;
+}
+
+.stack-form input:focus {
+  outline: none;
+}
+
+.hint {
+  margin: 0.5rem 0 0;
+  color: var(--muted);
+  font-family: var(--font-manrope);
+  font-size: 0.9rem;
+}
+
+.favorites-panel.panel--grow .favorites-panel__surface {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.favorites-panel .panel__body--scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.orders-panel.panel--grow .panel__body--scroll {
+  overflow: hidden;
+}
+
+@media (max-width: 1279px) {
+  .orders-panel.panel--grow .panel__body--scroll,
+  .favorites-panel .panel__body--scroll {
+    overflow-x: auto;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .orders-panel.panel--grow .panel__body--scroll::-webkit-scrollbar,
+  .favorites-panel .panel__body--scroll::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  .data-table {
+    min-width: 520px;
+  }
+}

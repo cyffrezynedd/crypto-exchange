@@ -1,0 +1,88 @@
+:root {
+  --q-primary: #793eed;
+  --q-primary-hover: #a475ff;
+  --q-primary-active: #b996ff;
+  --q-base: #ffffff;
+  --q-base-010: rgba(255, 255, 255, 0.1);
+  --q-grey: #131313;
+  --q-grey-light: #2f2f2f;
+  --q-grey-disabled: #454545;
+  --q-grey-hover: #595959;
+  --q-grey-active: #5d5d5d;
+  --q-select-hover: #707070;
+  --q-grey-fading: #717171;
+  --q-secondary: #8a8a8a;
+  --q-error: #db2a27;
+  --q-ghost: #333333;
+  --q-radius-10: 10px;
+  --q-radius-16: 16px;
+  --q-radius-20: 20px;
+  --q-radius-24: 24px;
+  --bp-tablet: 1280px;
+  --bp-fhd: 1920px;
+  --bp-desktop: 1280px;
+  --bp-auth-split: 900px;
+  --shell-header-h: 57px;
+  --shell-body-gap: 0px;
+  --shell-body-offset: 57px;
+  --shell-sidebar-top: 57px;
+  --shell-sidebar-w: 236px;
+  --shell-sidebar-left: 25px;
+  --shell-content-pl: 269px;
+  --shell-inset-x: 10px;
+  --shell-body-pl: 0px;
+  --shell-body-pr: 0px;
+
+  --control-h: 40px;
+  --control-px: 16px;
+  --control-fs: 14px;
+  --control-radius: 10px;
+  --control-gap: 8px;
+
+  --surface-soft: rgba(255, 255, 255, 0.05);
+  --surface-soft-hover: rgba(255, 255, 255, 0.08);
+
+  --bg: #131313;
+  --panel: rgba(255, 255, 255, 0.05);
+  --border: rgba(255, 255, 255, 0.08);
+  --text: #ffffff;
+  --muted: #8a8a8a;
+  --accent: #793eed;
+  --accent-soft: rgba(121, 62, 237, 0.18);
+  --success: #34d399;
+  --danger: #db2a27;
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --shell-body-gap: 14px;
+    --shell-body-offset: calc(var(--shell-header-h) + var(--shell-body-gap));
+    --shell-sidebar-top: var(--shell-body-offset);
+    --shell-body-pl: 24px;
+    --shell-body-pr: 40px;
+    --control-h: 40px;
+    --control-px: 16px;
+    --control-fs: 14px;
+    --control-radius: 10px;
+    --control-gap: 8px;
+  }
+}
+
+@media (min-width: 1920px) {
+  :root {
+    --shell-header-h: 69px;
+    --shell-body-gap: 11px;
+    --shell-body-offset: calc(var(--shell-header-h) + var(--shell-body-gap));
+    --shell-sidebar-top: 101px;
+    --shell-sidebar-w: 340px;
+    --shell-sidebar-left: 40px;
+    --shell-content-pl: 405px;
+    --shell-body-pl: 40px;
+    --shell-body-pr: 40px;
+    --control-h: 48px;
+    --control-px: 20px;
+    --control-fs: 16px;
+    --control-radius: 16px;
+    --control-gap: 10px;
+  }
+}

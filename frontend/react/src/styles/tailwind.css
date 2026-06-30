@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@custom-variant auth-split {
+  @media (width >= 900px) {
+    @slot;
+  }
+}
+
+@theme {
+  --breakpoint-fhd: 1920px;
+  --breakpoint-desktop: 1280px;
+  --breakpoint-tablet: 768px;
+  --font-stapel: 'Stapel', sans-serif;
+  --font-manrope: 'Manrope', sans-serif;
+  --color-primary: #793eed;
+  --color-primary-hover: #a475ff;
+  --color-primary-active: #b996ff;
+  --color-base: #ffffff;
+  --color-base-010: rgba(255, 255, 255, 0.1);
+  --color-grey: #131313;
+  --color-grey-light: #2f2f2f;
+  --color-grey-disabled: #454545;
+  --color-grey-hover: #595959;
+  --color-grey-fading: #717171;
+  --color-secondary: #8a8a8a;
+  --color-error: #db2a27;
+  --color-popup-bg-020: rgba(0, 0, 0, 0.2);
+  --radius-10: 10px;
+  --radius-16: 16px;
+  --radius-20: 20px;
+  --radius-24: 24px;
+  --radius-30: 30px;
+}
+
+@import './fonts.css';

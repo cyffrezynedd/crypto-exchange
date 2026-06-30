@@ -1,0 +1,25 @@
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  .auth-page__form-inner,
+  .auth-page__hero,
+  .auth-page__mobile-head,
+  .content-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    visibility: visible !important;
+  }
+}
+
+.content-reveal {
+  width: 100%;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.panel__body--center > .content-reveal {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+}
